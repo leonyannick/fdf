@@ -6,16 +6,19 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:36:26 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/02 18:06:40 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:36:19 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
 
 /**
+ * mat * vec = x
  * matrix multiplication: the number of columns in the first matrix must
  * be equal to the number of rows in the second matrix
  * m(rows) x n(columns)
+ * @param p point (vector) for multiplication
+ * @param m 3x3 vector for multiplication
 */
 static t_pointd	*vec_mat_mul(t_pointd *p, const double m[3][3])
 {
@@ -30,6 +33,12 @@ static t_pointd	*vec_mat_mul(t_pointd *p, const double m[3][3])
 	return (res);
 }
 
+/**
+ * point is rotated n radian around the x-axis
+ * @param rad angle in radian
+ * (multiply degree with macro DEG2RAD for radian value)
+ * @param point point that is rotated
+*/
 static t_pointd	*rotate_xaxis(t_pointd *point, double rad)
 {
 	const double	rot_x[3][3] = {
@@ -40,6 +49,12 @@ static t_pointd	*rotate_xaxis(t_pointd *point, double rad)
 	return (vec_mat_mul(point, rot_x));
 }
 
+/**
+ * point is rotated n radian around the y-axis
+ * @param rad angle in radian
+ * (multiply degree with macro DEG2RAD for radian value)
+ * @param point point that is rotated
+*/
 static t_pointd	*rotate_yaxis(t_pointd *point, double rad)
 {
 	const double	rot_y[3][3] = {
@@ -50,6 +65,10 @@ static t_pointd	*rotate_yaxis(t_pointd *point, double rad)
 	return (vec_mat_mul(point, rot_y));
 }
 
+/**
+ * 3d point projected to 2d point (z coordinate is ommited)
+ * not really necessary, as you could just not use the zcoordinate
+*/
 static t_pointd	*projection_to_2d(t_pointd *point)
 {
 	const double	proj[3][3] = {
@@ -60,6 +79,10 @@ static t_pointd	*projection_to_2d(t_pointd *point)
 	return (vec_mat_mul(point, proj));
 }
 
+/**
+ * pointd struct is used for calculations (floating values)
+ * after projection values are rounded back to ints
+*/
 t_point	*isometric_proj(t_point *point)
 {
 	t_pointd	*temp;
@@ -75,7 +98,7 @@ t_point	*isometric_proj(t_point *point)
 	temp = projection_to_2d(temp);
 	point->x = (int)round(temp->x);
 	point->y = (int)round(temp->y);
-	point->z = 0;
+	point->z = (int)round(temp->z);
 	free(temp);
 	return (point);
 }
