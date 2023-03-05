@@ -6,14 +6,18 @@
 #    By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/19 09:17:44 by lbaumann          #+#    #+#              #
-#    Updated: 2023/02/19 12:08:02 by lbaumann         ###   ########.fr        #
+#    Updated: 2023/03/02 13:53:31 by lbaumann         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fdf
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+#CFLAGS = -Wall -Werror -Wextra
+
+ifeq ($(DEBUG), 1)
+CFLAGS = -g
+endif
 
 SRCDIR = srcs/
 INCDIR = includes/
@@ -30,7 +34,7 @@ RC	= \033[0m
 
 HEADERS = -I $(INCDIR) -I $(LIBMLX)/include
 
-SRC = main.c
+SRC = main.c line.c map.c projection.c
 
 #libft
 LIBFT = $(LIBFTDIR)libft.a

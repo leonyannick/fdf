@@ -1,0 +1,82 @@
+mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "fdf", true);
+	if (!mlx)
+		return (-1);
+
+	// Create a new image
+	mlx_image_t* img = mlx_new_image(mlx, 512, 512);
+	if (!img)
+		return (-1);
+	
+	t_point *p1 = malloc(sizeof(t_point));
+	t_point *p2 = malloc(sizeof(t_point));
+	t_point *p3 = malloc(sizeof(t_point));
+	t_point *p4 = malloc(sizeof(t_point));
+	t_point *p1h = malloc(sizeof(t_point));
+	t_point *p2h = malloc(sizeof(t_point));
+	t_point *p3h = malloc(sizeof(t_point));
+	t_point *p4h = malloc(sizeof(t_point));
+	p1->x = 60;
+	p1->y = 60;
+	p1->z = 0;
+
+	p2->x = 160;
+	p2->y = 60;
+	p2->z = 0;
+	
+	p4->x = 60;
+	p4->y = 160;
+	p4->z = 0;
+	
+	p3->x = 160;
+	p3->y = 160;
+	p3->z = 0;
+
+	p1h->x = 60;
+	p1h->y = 60;
+	p1h->z = 100;
+
+	p2h->x = 160;
+	p2h->y = 60;
+	p2h->z = 100;
+	
+	p4h->x = 60;
+	p4h->y = 160;
+	p4h->z = 100;
+	
+	p3h->x = 160;
+	p3h->y = 160;
+	p3h->z = 100;
+
+
+	
+	p1 = isometric_proj(p1);
+	p2 = isometric_proj(p2);
+	p3 = isometric_proj(p3);
+	p4 = isometric_proj(p4);
+	p1h = isometric_proj(p1h);
+	p2h = isometric_proj(p2h);
+	p3h = isometric_proj(p3h);
+	p4h = isometric_proj(p4h);
+	
+	plot_line(p1, p2, img);
+	plot_line(p2, p3, img);
+	plot_line(p3, p4, img);
+	plot_line(p4, p1, img);
+
+	plot_line(p1h, p2h, img);
+	plot_line(p2h, p3h, img);
+	plot_line(p3h, p4h, img);
+	plot_line(p4h, p1h, img);
+
+	plot_line(p1, p1h, img);
+	plot_line(p2, p2h, img);
+	plot_line(p3, p3h, img);
+	plot_line(p4, p4h, img);
+
+
+	if (mlx_image_to_window(mlx, img, 0, 0) < 0)
+		return (-1);
+
+	mlx_loop(mlx);
+
+	mlx_terminate(mlx);
