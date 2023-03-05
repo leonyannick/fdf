@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 12:28:04 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/05 17:55:33 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,11 @@ typedef struct s_pointd
 	double				z;
 }t_pointd;
 
-// typedef struct s_map
-// {
-// 	t_point	*origin;
-// }t_map;
-
 typedef struct s_map
 {
-	int		**map;
-	int		nrows;
-	int		nclmns;
+	t_point		**map;
+	int			nrows;
+	int			nclmns;
 }t_map;
 
 
