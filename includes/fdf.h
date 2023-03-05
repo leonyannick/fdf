@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 17:55:33 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:16:45 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include <math.h>
 
 //mlx window size
-# define WIDTH 512
-# define HEIGHT 512
+# define WIDTH 1920
+# define HEIGHT 1080
 
 //f(rad) = rad * (180 / pi)
 # define RAD2DEG 57.295779513082323
@@ -37,7 +37,6 @@ typedef struct s_point
 	int				x;
 	int				y;
 	int				z;
-	struct s_point	*next;
 }t_point;
 
 typedef struct s_pointd
@@ -49,7 +48,7 @@ typedef struct s_pointd
 
 typedef struct s_map
 {
-	t_point		**map;
+	t_point		***map;
 	int			nrows;
 	int			nclmns;
 }t_map;
@@ -80,9 +79,10 @@ typedef struct s_bresenham
 
 //line plotting
 void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img);
+void	connect_the_dots(t_map *map, mlx_image_t *img);
 
 //map parsing
-t_map	*parse_map(int fd);
+t_map	*parse_map(int fd, char *map_name);
 t_map	*add_point(t_map *map, int x, int y, int z);
 void	print_map(t_map *map);
 

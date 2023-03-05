@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 18:26:05 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/02/27 15:23:13 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:10:48 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,47 @@ void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img)
 	}
 	mlx_put_pixel(img, line->x, line->y, 0xFF00FF);
 	free(line);
+}
+
+void	connect_the_dots(t_map *map, mlx_image_t *img)
+{
+	int		row;
+	int		clmn;
+
+	row = 0;
+	while (row < map->nrows)
+	{
+		clmn = 0;
+		while (clmn < (map->nclmns))
+		{
+			(map->map)[row][clmn] = isometric_proj((map->map)[row][clmn]);
+			clmn++;
+		}
+		row++;
+	}
+
+	row = 0;
+	while (row < map->nrows)
+	{
+		clmn = 0;
+		while (clmn < (map->nclmns - 1))
+		{
+			plot_line((map->map)[row][clmn], (map->map)[row][clmn + 1], img);
+			clmn++;
+		}
+		row++;
+	}
+
+	clmn = 0;
+	while (clmn < map->nclmns)
+	{
+		row = 0;
+		while (row < (map->nrows - 1))
+		{
+			plot_line((map->map)[row][clmn], (map->map)[row + 1][clmn], img);
+			row++;
+		}
+		clmn++;
+	}
+	
 }

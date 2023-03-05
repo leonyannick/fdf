@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 17:56:31 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:22:12 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@ void	print_map(t_map *map)
 	t_point	*pt;
 
 	row = 0;
-	while (row <= map->nrows)
+	while (row < map->nrows)
 	{
-		while (clmn <= map->map)
+		clmn = 0;
+		while (clmn < map->nclmns)
 		{
-			pt = map->map[clmn][row];
+			pt = (map->map)[row][clmn];
 			printf("x:%i y:%i, z:%i\n", pt->x, pt->y, pt->z);
 			clmn++;
 		}
@@ -38,21 +39,14 @@ void	print_map(t_map *map)
 t_map	*add_point(t_map *map, int x, int y, int z)
 {
 	t_point	*point;
-	t_point	*prev;
 
 	point = malloc(sizeof(t_point));
 	if (!point)
 		return (NULL);
-	if (x == 0 && y == 0)
-		map->origin = point;
-	prev = map->origin;
-	while (prev->next)
-		prev = prev->next;
-	prev->next = point;
 	point->x = x;
 	point->y = y;
 	point->z = z;
-	point->next = NULL;
+	(map->map)[y][x] = point;
 	return (map);
 }
 
@@ -79,7 +73,9 @@ static int	n_sub_arr(char **s)
 	int		n;
 
 	n = 0;
-	while (s)
+	if (!s)
+		return (n);
+	while (*s)
 	{
 		s++;
 		n++;
@@ -112,19 +108,22 @@ t_map	*parse_map(int fd, char *map_name)
 	map = init_map(map, fd);
 	fd = open(map_name, O_RDONLY);
 	if (fd < 0)
-		return (EXIT_FAILURE);
+		return (NULL);
 	y = 0;
 	row = ft_split(get_next_line(fd), ' ');
 	nclmns = n_sub_arr(row);
-	while (row)
+	map->nclmns = nclmns;
+	while (row && (map->nclmns == nclmns))
 	{
-		x = 0;
 		(map->map)[y] = malloc(sizeof(t_point) * nclmns);
 		if (!((map->map)[y]))
 			return (NULL);
+		x = 0;
 		while (row[x])
 		{
-			add_point(map, x, y, ft_)
+			map = add_point(map, x, y, ft_atoi(row[x]));
+			if (!map)
+				return (NULL);
 			x++;
 		}
 		y++;
