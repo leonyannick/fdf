@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 20:22:12 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:59:00 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ void	print_map(t_map *map)
 		while (clmn < map->nclmns)
 		{
 			pt = (map->map)[row][clmn];
-			printf("x:%i y:%i, z:%i\n", pt->x, pt->y, pt->z);
+			printf("(%i,%i)\033[35;1m%i\033[0m ", pt->x, pt->y, pt->z);
 			clmn++;
 		}
+		printf("\n");
 		row++;
 	}
 }
@@ -102,7 +103,6 @@ t_map	*parse_map(int fd, char *map_name)
 	int		x;
 	int		y;
 	char	**row;
-	int		nclmns;
 	t_map	*map;
 	
 	map = init_map(map, fd);
@@ -111,11 +111,10 @@ t_map	*parse_map(int fd, char *map_name)
 		return (NULL);
 	y = 0;
 	row = ft_split(get_next_line(fd), ' ');
-	nclmns = n_sub_arr(row);
-	map->nclmns = nclmns;
-	while (row && (map->nclmns == nclmns))
+	map->nclmns = n_sub_arr(row);
+	while (row && (map->nclmns == n_sub_arr(row)))
 	{
-		(map->map)[y] = malloc(sizeof(t_point) * nclmns);
+		(map->map)[y] = malloc(sizeof(t_point) * map->nclmns);
 		if (!((map->map)[y]))
 			return (NULL);
 		x = 0;
@@ -128,7 +127,6 @@ t_map	*parse_map(int fd, char *map_name)
 		}
 		y++;
 		row = ft_split(get_next_line(fd), ' ');
-		nclmns = n_sub_arr(row);
 	}
 	return (map);
 }

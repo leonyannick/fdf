@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 20:16:45 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:39:19 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_point
 	int				x;
 	int				y;
 	int				z;
+	int				color;
 }t_point;
 
 typedef struct s_pointd
