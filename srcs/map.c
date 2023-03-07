@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 20:59:00 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/07 12:00:36 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,25 @@ void	print_map(t_map *map)
 		while (clmn < map->nclmns)
 		{
 			pt = (map->map)[row][clmn];
-			printf("(%i,%i)\033[35;1m%i\033[0m ", pt->x, pt->y, pt->z);
+			printf("(%i,%i)\033[35;1m%i\033[0m\t", pt->x, pt->y, pt->z);
 			clmn++;
 		}
 		printf("\n");
 		row++;
 	}
+}
+
+void	free_split_arr(char **arr)
+{
+	size_t	i;
+
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }
 
 /**
@@ -51,10 +64,14 @@ t_map	*add_point(t_map *map, int x, int y, int z)
 	return (map);
 }
 
-t_map	*init_map(t_map *map, int fd)
+t_map	*init_map(t_map *map, char *map_name)
 {
 	int		nrows;
+	int		fd;
 	
+	fd = open(map_name, O_RDONLY);
+	if (fd < 0)
+		return (NULL);
 	map = malloc(sizeof(t_map));
 	if (!map)
 		return (NULL);
@@ -66,7 +83,10 @@ t_map	*init_map(t_map *map, int fd)
 		return (NULL);
 	map->nrows = nrows;
 	close(fd);
-	return (map);
+	fd = open(map_name, O_RDONLY);
+	if (fd < 0)
+		return (NULL);
+	return (parse_map(map, fd));
 }
 
 static int	n_sub_arr(char **s)
@@ -98,17 +118,12 @@ static int	n_sub_arr(char **s)
  * 
  * @param fd file descriptor to the map file
 */
-t_map	*parse_map(int fd, char *map_name)
+t_map	*parse_map(t_map *map, int fd)
 {
 	int		x;
 	int		y;
 	char	**row;
-	t_map	*map;
-	
-	map = init_map(map, fd);
-	fd = open(map_name, O_RDONLY);
-	if (fd < 0)
-		return (NULL);
+
 	y = 0;
 	row = ft_split(get_next_line(fd), ' ');
 	map->nclmns = n_sub_arr(row);
@@ -126,7 +141,8 @@ t_map	*parse_map(int fd, char *map_name)
 			x++;
 		}
 		y++;
+		free_split_arr(row);
 		row = ft_split(get_next_line(fd), ' ');
 	}
-	return (map);
+	return (free_split_arr(row), map);
 }

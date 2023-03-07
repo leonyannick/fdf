@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+         #
+#    By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/19 09:17:44 by lbaumann          #+#    #+#              #
-#    Updated: 2023/03/02 13:53:31 by lbaumann         ###   ########.fr        #
+#    Updated: 2023/03/07 09:58:08 by lbaumann         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,9 @@ LIBFTINCL = -L$(LIBFTDIR) -lft
 #mlx42
 MLX = $(MLXDIR)build/libmlx42.a
 #incl for mac
-MLXINCL = $(MLX) -Iinclude -lglfw -L"/opt/homebrew/Cellar/glfw/3.3.8/lib/"
+#MLXINCL = $(MLX) -Iinclude -lglfw -L"/opt/homebrew/Cellar/glfw/3.3.8/lib/"
+#incl for linux
+MLXINCL = $(MLX) -Iinclude -ldl -lglfw -pthread -lm
 
 SRCS := $(addprefix $(SRCDIR), $(SRC))
 OBJ := $(SRC:.c=.o)

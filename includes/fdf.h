@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 20:39:19 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/07 11:16:13 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img);
 void	connect_the_dots(t_map *map, mlx_image_t *img);
 
 //map parsing
-t_map	*parse_map(int fd, char *map_name);
+t_map	*init_map(t_map *map, char *map_name);
+t_map	*parse_map(t_map *map, int fd);
 t_map	*add_point(t_map *map, int x, int y, int z);
 void	print_map(t_map *map);
 

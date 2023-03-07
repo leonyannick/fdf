@@ -3,21 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:52:40 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 20:03:32 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/07 12:11:22 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
 
-void	print_p(t_point *point)
+void	free_map(t_map *map)
 {
-	printf("x: %i\n", point->x);
-	printf("y: %i\n", point->y);
-	printf("z: %i\n", point->z);
-	printf("\n");
+	int	row;
+	int	clmn;
+
+	if (map)
+	{
+		row = 0;
+		while ((map->map)[row])
+		{
+			clmn = 0;
+			while ((map->map)[row][clmn])
+			{
+				free((map->map)[row][clmn]);
+				clmn++;
+			}
+			free((map->map)[row]);
+			row++;
+		}
+	}
+	free(map->map);
+	free(map);
 }
 
 int	main(int argc, char **argv)
@@ -27,11 +43,18 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		return (ft_printf("Usage: ./fdf [mapfile] [options]\n"), EXIT_SUCCESS);
+
+/* 	map = init_map(map, argv[1]);
+	if (!map)
+		return (free_map(map), perror("map init/parsing failed"), EXIT_FAILURE);
+
+	free_map(map); */
 	fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
-		return (EXIT_FAILURE);
-	map = parse_map(fd, argv[1]);
-	print_map(map);
+
+	free(get_next_line(fd));
+
+	
+	/* print_map(map);
 
 	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "Test", true);
 	if (!mlx)
@@ -52,7 +75,7 @@ int	main(int argc, char **argv)
 	mlx_loop(mlx);
 
 	mlx_terminate(mlx);
-
+ */
 	
 	return (EXIT_SUCCESS);
 }
