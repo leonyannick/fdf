@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 18:26:05 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/05 20:10:48 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/07 18:16:04 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img)
 		return ;
 	while (line->x != p2->x || line->y != p2->y)
 	{
-		mlx_put_pixel(img, line->x, line->y, 0xFF00FF);
+		mlx_put_pixel(img, line->x, line->y, 0xFFFFFF);
 		line->e2 = 2 * line->err;
 		if (line->e2 >= line->dy)
 		{
@@ -77,7 +77,7 @@ void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img)
 			line->y += line->sy;
 		}
 	}
-	mlx_put_pixel(img, line->x, line->y, 0xFF00FF);
+	mlx_put_pixel(img, line->x, line->y, 0xFFFFFF);
 	free(line);
 }
 
@@ -90,18 +90,6 @@ void	connect_the_dots(t_map *map, mlx_image_t *img)
 	while (row < map->nrows)
 	{
 		clmn = 0;
-		while (clmn < (map->nclmns))
-		{
-			(map->map)[row][clmn] = isometric_proj((map->map)[row][clmn]);
-			clmn++;
-		}
-		row++;
-	}
-
-	row = 0;
-	while (row < map->nrows)
-	{
-		clmn = 0;
 		while (clmn < (map->nclmns - 1))
 		{
 			plot_line((map->map)[row][clmn], (map->map)[row][clmn + 1], img);
@@ -109,7 +97,6 @@ void	connect_the_dots(t_map *map, mlx_image_t *img)
 		}
 		row++;
 	}
-
 	clmn = 0;
 	while (clmn < map->nclmns)
 	{
@@ -121,5 +108,4 @@ void	connect_the_dots(t_map *map, mlx_image_t *img)
 		}
 		clmn++;
 	}
-	
 }

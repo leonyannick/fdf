@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:52:40 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/07 12:11:22 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/08 15:57:10 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,65 +17,64 @@ void	free_map(t_map *map)
 	int	row;
 	int	clmn;
 
-	if (map)
+	if (!map && !(map->map))
+		return ;
+	row = 0;
+	while (row < map->nrows)
 	{
-		row = 0;
-		while ((map->map)[row])
+		clmn = 0;
+		while (clmn < map->nclmns)
 		{
-			clmn = 0;
-			while ((map->map)[row][clmn])
-			{
-				free((map->map)[row][clmn]);
-				clmn++;
-			}
-			free((map->map)[row]);
-			row++;
+			free((map->map)[row][clmn]);
+			clmn++;
 		}
+		free((map->map)[row]);
+		row++;
 	}
 	free(map->map);
 	free(map);
+}
+
+t_input	*init_input(t_input *input, char *map_name)
+{
+	input = malloc(sizeof(t_input));
+	if (!input)
+		return (NULL);
+	input->x = 0;
+	input->y = 0;
+	input->fd = open(map_name, O_RDONLY);
+	if (!input->fd)
+		return (NULL);
+	return (input);
 }
 
 int	main(int argc, char **argv)
 {
 	int	fd;
 	t_map	*map;
+	t_input	*input;
 
 	if (argc != 2)
 		return (ft_printf("Usage: ./fdf [mapfile] [options]\n"), EXIT_SUCCESS);
-
-/* 	map = init_map(map, argv[1]);
+	input = init_input(input, argv[1]);
+	if (!input)
+		return (perror("input init/parsing failed"), EXIT_FAILURE);
+	map = init_map(map, input, argv[1]);
 	if (!map)
 		return (free_map(map), perror("map init/parsing failed"), EXIT_FAILURE);
-
-	free_map(map); */
-	fd = open(argv[1], O_RDONLY);
-
-	free(get_next_line(fd));
-
+	map = init_window(map);
+	if (!map)
+		return (free_map(map), perror("mlx window init failed"), EXIT_FAILURE);
 	
-	/* print_map(map);
+	if (mlx_image_to_window(map->mlx, map->img, 0, 0) < 0)
+		return (EXIT_FAILURE);
+	map = change_points(map, project_point);
 
-	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "Test", true);
-	if (!mlx)
-		return (-1);
 
-	// Create a new image
-	mlx_image_t* img = mlx_new_image(mlx, 512, 512);
-	if (!img)
-		return (-1);
-
+	mlx_key_hook(map->mlx, &my_keyhook, map);
+	mlx_loop(map->mlx);
+	mlx_terminate(map->mlx);
 	
-	connect_the_dots(map, img);
-
-	
-	if (mlx_image_to_window(mlx, img, 0, 0) < 0)
-		return (-1);
-
-	mlx_loop(mlx);
-
-	mlx_terminate(mlx);
- */
-	
+	free_map(map);
 	return (EXIT_SUCCESS);
 }

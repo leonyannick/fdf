@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/07 11:16:13 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/08 17:38:41 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,27 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 
-//f(rad) = rad * (180 / pi)
+//deg = rad * (180 / pi)
 # define RAD2DEG 57.295779513082323
-//f(deg) = deg * (pi / 180)
+//rad = deg * (pi / 180)
 # define DEG2RAD 0.017453292519943
+
+//initial map attributes (isometric proj)
+# define ZOOM 10
+# define YOFF 100
+# define XOFF 100
+# define XDEG 35
+# define YDEG 45
+
+//step size for key presses
+# define S_ZOOM 1.1
+# define S_YOFF 10
+# define S_XOFF 10
+# define S_XDEG 5
+# define S_YDEG 5
+
+
+#define BPP sizeof(int32_t)
 
 typedef struct s_point
 {
@@ -52,8 +69,28 @@ typedef struct s_map
 	t_point		***map;
 	int			nrows;
 	int			nclmns;
+	float		zoom;
+	int			yoff;
+	int			xoff;
+	int			xdeg;
+	int			ydeg;
+	mlx_t*		mlx;
+	mlx_image_t	*img;
 }t_map;
 
+typedef struct s_input
+{
+	char	*line;
+	char	**row;
+	int		x;
+	int		y;
+	int		fd;
+}t_input;
+
+typedef struct s_window
+{
+	
+}t_window;
 
 /**
  * Struct to store necessary values for Bresenham algorithm
@@ -83,12 +120,27 @@ void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img);
 void	connect_the_dots(t_map *map, mlx_image_t *img);
 
 //map parsing
-t_map	*init_map(t_map *map, char *map_name);
-t_map	*parse_map(t_map *map, int fd);
+t_map	*init_map(t_map *map, t_input *input, char *map_name);
+t_map	*parse_map(t_map *map, t_input *input);
 t_map	*add_point(t_map *map, int x, int y, int z);
 void	print_map(t_map *map);
 
-//isometric projection
-t_point	*isometric_proj(t_point *point);
+//point operations
+t_map	*change_points(t_map *map, t_point *(*f)(t_point *point, t_map *map));
+t_point	*translate_point(t_point *point, t_map *map);
+t_point	*project_point(t_point *point, t_map *map);
+t_point	*zoom_point(t_point *point, t_map *map);
+
+//window stuff
+t_map	*init_window(t_map *map);
+void	my_keyhook(mlx_key_data_t keydata, void* param);
+
+//projection
+t_pointd	*rotate_yaxis(t_pointd *point, double rad);
+t_pointd	*rotate_xaxis(t_pointd *point, double rad);
+t_pointd	*vec_mat_mul(t_pointd *p, const double m[3][3]);
+
+//main
+t_input	*init_input(t_input *input, char *map_name);
 
 #endif

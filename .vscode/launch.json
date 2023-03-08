@@ -8,10 +8,10 @@
 	"name":"Launch",
 	"type":"cppdbg",
 	"program":"${workspaceFolder}/fdf",
-	"args":["test_maps/input.fdf"],
+	"args":["test_maps/42.fdf"],
 	"cwd":"${workspaceFolder}",
 	"request":"launch",
-	"MIMode":"lldb"
+	"MIMode":"gdb"
 	}
 	]
 }

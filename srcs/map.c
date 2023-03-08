@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/07 12:00:36 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/08 14:14:49 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	free_split_arr(char **arr)
 {
 	size_t	i;
 
+	if (!arr)
+		return ;
 	i = 0;
 	while (arr[i])
 	{
@@ -57,36 +59,52 @@ t_map	*add_point(t_map *map, int x, int y, int z)
 	point = malloc(sizeof(t_point));
 	if (!point)
 		return (NULL);
-	point->x = x;
-	point->y = y;
-	point->z = z;
+	point->x = x * ZOOM + XOFF;
+	point->y = y * ZOOM + YOFF;
+	point->z = z * ZOOM;
 	(map->map)[y][x] = point;
 	return (map);
 }
 
-t_map	*init_map(t_map *map, char *map_name)
+t_map	*init_map_attributes(t_map *map)
 {
-	int		nrows;
-	int		fd;
-	
-	fd = open(map_name, O_RDONLY);
-	if (fd < 0)
-		return (NULL);
 	map = malloc(sizeof(t_map));
 	if (!map)
 		return (NULL);
+	map->zoom = 0;
+	map->xoff = 0;
+	map->yoff = 0;
+	map->xdeg = 0;
+	map->ydeg = 0;
+	return (map);
+}
+
+t_map	*init_map(t_map *map, t_input *input, char *map_name)
+{
+	int		nrows;
+
+	map = init_map_attributes(map);
+	if (!map)
+		return (NULL);
 	nrows = 0;
-	while (get_next_line(fd))
+	input->line = get_next_line(input->fd);
+	while (input->line)
+	{
+		free(input->line);
 		nrows++;
+		input->line = get_next_line(input->fd);
+	}
 	map->map = malloc(sizeof(t_point) * nrows);
 	if (!map->map)
 		return (NULL);
 	map->nrows = nrows;
-	close(fd);
-	fd = open(map_name, O_RDONLY);
-	if (fd < 0)
+	close(input->fd);
+	free(input->line);
+	free(input);
+	input = init_input(input, map_name);
+	if (!input)
 		return (NULL);
-	return (parse_map(map, fd));
+	return (parse_map(map, input));
 }
 
 static int	n_sub_arr(char **s)
@@ -118,31 +136,29 @@ static int	n_sub_arr(char **s)
  * 
  * @param fd file descriptor to the map file
 */
-t_map	*parse_map(t_map *map, int fd)
+t_map	*parse_map(t_map *map, t_input *input)
 {
-	int		x;
-	int		y;
-	char	**row;
-
-	y = 0;
-	row = ft_split(get_next_line(fd), ' ');
-	map->nclmns = n_sub_arr(row);
-	while (row && (map->nclmns == n_sub_arr(row)))
+	input->line = get_next_line(input->fd);
+	input->row = ft_split(input->line, ' ');
+	map->nclmns = n_sub_arr(input->row);
+	while (input->row && (map->nclmns == n_sub_arr(input->row)))
 	{
-		(map->map)[y] = malloc(sizeof(t_point) * map->nclmns);
-		if (!((map->map)[y]))
+		(map->map)[input->y] = malloc(sizeof(t_point) * map->nclmns);
+		if (!((map->map)[input->y]))
 			return (NULL);
-		x = 0;
-		while (row[x])
+		input->x = 0;
+		while (input->row[input->x])
 		{
-			map = add_point(map, x, y, ft_atoi(row[x]));
+			map = add_point(map, input->x, input->y, ft_atoi(input->row[input->x]));
 			if (!map)
 				return (NULL);
-			x++;
+			(input->x)++;
 		}
-		y++;
-		free_split_arr(row);
-		row = ft_split(get_next_line(fd), ' ');
+		(input->y)++;
+		free(input->line);
+		free_split_arr(input->row);
+		input->line = get_next_line(input->fd);
+		input->row = ft_split(input->line, ' ');
 	}
-	return (free_split_arr(row), map);
+	return (free(input->line), free_split_arr(input->row), free(input), map);
 }
