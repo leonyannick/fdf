@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:33:59 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/08 17:34:33 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/09 11:16:29 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ t_map	*change_points(t_map *map, t_point *(*f)(t_point *point, t_map *map))
 		}
 		row++;
 	}
-	connect_the_dots(map, map->img);
+	connect_the_dots(map);
 	return (map);
 }

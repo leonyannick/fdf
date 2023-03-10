@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/08 17:38:41 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/09 18:32:58 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
+# include <stdbool.h>
 
 //mlx window size
 # define WIDTH 1920
@@ -38,6 +39,7 @@
 # define XOFF 100
 # define XDEG 35
 # define YDEG 45
+# define P_COLOR 0xFFFFFFFF
 
 //step size for key presses
 # define S_ZOOM 1.1
@@ -74,6 +76,7 @@ typedef struct s_map
 	int			xoff;
 	int			xdeg;
 	int			ydeg;
+	bool		clr_int;
 	mlx_t*		mlx;
 	mlx_image_t	*img;
 }t_map;
@@ -113,11 +116,12 @@ typedef struct s_bresenham
 	int		sy;
 	int		dy;
 	int		dx;
+	int		clr_step;
 }t_bresenham;
 
 //line plotting
-void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img);
-void	connect_the_dots(t_map *map, mlx_image_t *img);
+void	plot_line(t_point *p1, t_point *p2, t_map *map);
+void	connect_the_dots(t_map *map);
 
 //map parsing
 t_map	*init_map(t_map *map, t_input *input, char *map_name);
@@ -139,6 +143,10 @@ void	my_keyhook(mlx_key_data_t keydata, void* param);
 t_pointd	*rotate_yaxis(t_pointd *point, double rad);
 t_pointd	*rotate_xaxis(t_pointd *point, double rad);
 t_pointd	*vec_mat_mul(t_pointd *p, const double m[3][3]);
+
+//color
+int	line_color_inter(t_point *start, t_point *end, t_bresenham *line, t_map *map);
+void		toggle_color(t_map *map);
 
 //main
 t_input	*init_input(t_input *input, char *map_name);

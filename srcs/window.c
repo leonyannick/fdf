@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:03:34 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/08 17:44:13 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/09 15:17:18 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,6 @@ void	my_keyhook(mlx_key_data_t keydata, void *param)
 	if ((keydata.key == MLX_KEY_EQUAL || keydata.key == MLX_KEY_MINUS)
 		&& (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 		zoom(keydata.key, map);
+	if (keydata.key == MLX_KEY_Z && keydata.action == MLX_PRESS)
+		toggle_color(map);
 }

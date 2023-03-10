@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 18:26:05 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/07 18:16:04 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/09 18:24:20 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @param line pointer to Bresenham struct
  * @return NULL if allocations fails OR pointer to allocated Bresenham struct
 */
-static t_bresenham	*init_line(t_point *p1, t_point *p2, t_bresenham *line)
+static t_bresenham	*init_line(t_point *p1, t_point *p2, t_bresenham *line, t_map *map)
 {
 	line = malloc(sizeof(t_bresenham));
 	if (!line)
@@ -55,16 +55,18 @@ static t_bresenham	*init_line(t_point *p1, t_point *p2, t_bresenham *line)
  * @param p2 end point p2(x2,y2) 
  * @param img mlx_image
 */
-void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img)
+void	plot_line(t_point *p1, t_point *p2, t_map *map)
 {
 	t_bresenham	*line;
 
-	line = init_line(p1, p2, line);
+	line = init_line(p1, p2, line, map);
 	if (!line)
 		return ;
 	while (line->x != p2->x || line->y != p2->y)
 	{
-		mlx_put_pixel(img, line->x, line->y, 0xFFFFFF);
+		p1->color = line_color_inter(p1, p2, line, map);
+		if ((line->x >= 0) && (line->y >= 0) && (line->x <= WIDTH) && (line->y <= HEIGHT))
+			mlx_put_pixel(map->img, line->x, line->y, p1->color);
 		line->e2 = 2 * line->err;
 		if (line->e2 >= line->dy)
 		{
@@ -77,11 +79,12 @@ void	plot_line(t_point *p1, t_point *p2, mlx_image_t *img)
 			line->y += line->sy;
 		}
 	}
-	mlx_put_pixel(img, line->x, line->y, 0xFFFFFF);
+	if ((line->x >= 0) && (line->y >= 0) && (line->x <= WIDTH) && (line->y <= HEIGHT))
+		mlx_put_pixel(map->img, line->x, line->y, p2->color);
 	free(line);
 }
 
-void	connect_the_dots(t_map *map, mlx_image_t *img)
+void	connect_the_dots(t_map *map)
 {
 	int		row;
 	int		clmn;
@@ -92,7 +95,7 @@ void	connect_the_dots(t_map *map, mlx_image_t *img)
 		clmn = 0;
 		while (clmn < (map->nclmns - 1))
 		{
-			plot_line((map->map)[row][clmn], (map->map)[row][clmn + 1], img);
+			plot_line((map->map)[row][clmn], (map->map)[row][clmn + 1], map);
 			clmn++;
 		}
 		row++;
@@ -103,7 +106,7 @@ void	connect_the_dots(t_map *map, mlx_image_t *img)
 		row = 0;
 		while (row < (map->nrows - 1))
 		{
-			plot_line((map->map)[row][clmn], (map->map)[row + 1][clmn], img);
+			plot_line((map->map)[row][clmn], (map->map)[row + 1][clmn], map);
 			row++;
 		}
 		clmn++;

@@ -6,32 +6,11 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/08 14:14:49 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/10 11:23:01 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
-
-void	print_map(t_map *map)
-{
-	int		row;
-	int		clmn;
-	t_point	*pt;
-
-	row = 0;
-	while (row < map->nrows)
-	{
-		clmn = 0;
-		while (clmn < map->nclmns)
-		{
-			pt = (map->map)[row][clmn];
-			printf("(%i,%i)\033[35;1m%i\033[0m\t", pt->x, pt->y, pt->z);
-			clmn++;
-		}
-		printf("\n");
-		row++;
-	}
-}
 
 void	free_split_arr(char **arr)
 {
@@ -62,6 +41,7 @@ t_map	*add_point(t_map *map, int x, int y, int z)
 	point->x = x * ZOOM + XOFF;
 	point->y = y * ZOOM + YOFF;
 	point->z = z * ZOOM;
+	point->color = P_COLOR;
 	(map->map)[y][x] = point;
 	return (map);
 }
@@ -76,6 +56,7 @@ t_map	*init_map_attributes(t_map *map)
 	map->yoff = 0;
 	map->xdeg = 0;
 	map->ydeg = 0;
+	map->clr_int = false;
 	return (map);
 }
 
