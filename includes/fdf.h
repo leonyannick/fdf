@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/09 18:32:58 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/13 12:29:13 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@
 # define ZOOM 10
 # define YOFF 100
 # define XOFF 100
-# define XDEG 35
-# define YDEG 45
-# define P_COLOR 0xFFFFFFFF
+# define XDEG 215
+# define YDEG 225
+# define P_COLOR 0xFFFFFF
 
 //step size for key presses
 # define S_ZOOM 1.1
@@ -47,7 +47,6 @@
 # define S_XOFF 10
 # define S_XDEG 5
 # define S_YDEG 5
-
 
 #define BPP sizeof(int32_t)
 
@@ -68,7 +67,7 @@ typedef struct s_pointd
 
 typedef struct s_map
 {
-	t_point		***map;
+	t_point		***map_arr;
 	int			nrows;
 	int			nclmns;
 	float		zoom;
@@ -76,24 +75,27 @@ typedef struct s_map
 	int			xoff;
 	int			xdeg;
 	int			ydeg;
+	int			color;
 	bool		clr_int;
-	mlx_t*		mlx;
-	mlx_image_t	*img;
 }t_map;
 
 typedef struct s_input
 {
+	char	*map_file;
 	char	*line;
-	char	**row;
+	char	**split_line;
 	int		x;
 	int		y;
 	int		fd;
 }t_input;
 
-typedef struct s_window
+typedef struct s_data
 {
-	
-}t_window;
+	t_map		*map;
+	mlx_t*		mlx;
+	mlx_image_t	*img;
+	t_input		*input;
+}t_data;
 
 /**
  * Struct to store necessary values for Bresenham algorithm
@@ -119,24 +121,34 @@ typedef struct s_bresenham
 	int		clr_step;
 }t_bresenham;
 
-//line plotting
-void	plot_line(t_point *p1, t_point *p2, t_map *map);
-void	connect_the_dots(t_map *map);
+//init_data
+t_data		*init_data(t_data *data, char	*map_file);
+t_input		*init_input(t_input *input, char *map_file);
+t_map		*init_map(t_data *data, char *map_file);
 
-//map parsing
-t_map	*init_map(t_map *map, t_input *input, char *map_name);
-t_map	*parse_map(t_map *map, t_input *input);
-t_map	*add_point(t_map *map, int x, int y, int z);
-void	print_map(t_map *map);
+//line plotting
+void		plot_line(t_point *p1, t_point *p2, t_data *data);
+void		connect_the_dots(t_data *data);
+
+//map
+t_map		*malloc_map_rows(t_map *map, t_input *input);
+t_map		*parse_map(t_map *map, t_input *input);
+t_map		*add_point(t_map *map, int x, int y, int z);
+
+//utils
+void		print_map(t_map *map);
+void		free_split_arr(char **arr);
+int			n_sub_arr(char **s);
+t_input		*gnl_split(t_input *input);
 
 //point operations
-t_map	*change_points(t_map *map, t_point *(*f)(t_point *point, t_map *map));
-t_point	*translate_point(t_point *point, t_map *map);
-t_point	*project_point(t_point *point, t_map *map);
-t_point	*zoom_point(t_point *point, t_map *map);
+t_data	*paint_pixels(t_data *data, t_point *(*f)(t_point *point, t_map *map));
+t_point		*translate_point(t_point *point, t_map *map);
+t_point		*project_point(t_point *point, t_map *map);
+t_point		*zoom_point(t_point *point, t_map *map);
+t_point	*random_point_color(t_point *point, t_map *map);
 
 //window stuff
-t_map	*init_window(t_map *map);
 void	my_keyhook(mlx_key_data_t keydata, void* param);
 
 //projection
@@ -146,7 +158,7 @@ t_pointd	*vec_mat_mul(t_pointd *p, const double m[3][3]);
 
 //color
 int	line_color_inter(t_point *start, t_point *end, t_bresenham *line, t_map *map);
-void		toggle_color(t_map *map);
+int ft_random(int min, int max);
 
 //main
 t_input	*init_input(t_input *input, char *map_name);

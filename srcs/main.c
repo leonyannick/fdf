@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:52:40 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/09 15:53:27 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/10 17:00:47 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_map(t_map *map)
 	int	row;
 	int	clmn;
 
-	if (!map && !(map->map))
+	if (!map && !(map->map_arr))
 		return ;
 	row = 0;
 	while (row < map->nrows)
@@ -25,50 +25,28 @@ void	free_map(t_map *map)
 		clmn = 0;
 		while (clmn < map->nclmns)
 		{
-			free((map->map)[row][clmn]);
+			free((map->map_arr)[row][clmn]);
 			clmn++;
 		}
-		free((map->map)[row]);
+		free((map->map_arr)[row]);
 		row++;
 	}
-	free(map->map);
+	free(map->map_arr);
 	free(map);
-}
-
-t_input	*init_input(t_input *input, char *map_name)
-{
-	input = malloc(sizeof(t_input));
-	if (!input)
-		return (NULL);
-	input->x = 0;
-	input->y = 0;
-	input->fd = open(map_name, O_RDONLY);
-	if (!input->fd)
-		return (NULL);
-	return (input);
 }
 
 int	main(int argc, char **argv)
 {
-	int	fd;
-	t_map	*map;
-	t_input	*input;
+	t_data	*data;
+
 
 	if (argc != 2)
 		return (ft_printf("Usage: ./fdf [mapfile] [options]\n"), EXIT_SUCCESS);
-	input = init_input(input, argv[1]);
-	if (!input)
-		return (perror("input init/parsing failed"), EXIT_FAILURE);
-	map = init_map(map, input, argv[1]);
-	if (!map)
-		return (free_map(map), perror("map init/parsing failed"), EXIT_FAILURE);
-	map = init_window(map);
-	if (!map)
-		return (free_map(map), perror("mlx window init failed"), EXIT_FAILURE);
+	data = init_data(data, argv[1]);
+	if (!data)
+		return (perror("data init failed"), EXIT_FAILURE);
 	
-	if (mlx_image_to_window(map->mlx, map->img, 0, 0) < 0)
-		return (EXIT_FAILURE);
-	map = change_points(map, project_point);
+	paint_pixels(data, project_point);
 
 	/* t_point *p1 = malloc(sizeof(t_point));
 	t_point *p2 = malloc(sizeof(t_point));
@@ -86,10 +64,9 @@ int	main(int argc, char **argv)
 	plot_line(p2, p1, map); */
 	
 
-	mlx_key_hook(map->mlx, &my_keyhook, map);
-	mlx_loop(map->mlx);
-	mlx_terminate(map->mlx);
-	
-	free_map(map);
+	mlx_key_hook(data->mlx, &my_keyhook, data);
+	mlx_loop(data->mlx);
+	mlx_terminate(data->mlx);
+	free_map(data->map);
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 #    By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/19 09:17:44 by lbaumann          #+#    #+#              #
-#    Updated: 2023/03/09 11:01:54 by lbaumann         ###   ########.fr        #
+#    Updated: 2023/03/10 12:53:48 by lbaumann         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,15 @@ RC	= \033[0m
 
 HEADERS = -I $(INCDIR) -I $(LIBMLX)/include
 
-SRC = main.c line.c map.c projection.c window.c point_ops.c color.c
+SRC = main.c \
+	line.c \
+	map.c \
+	projection.c \
+	window.c \
+	point_ops.c \
+	color.c \
+	utils.c \
+	init_data.c
 
 #libft
 LIBFT = $(LIBFTDIR)libft.a

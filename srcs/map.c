@@ -6,26 +6,11 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/10 11:23:01 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/10 13:06:09 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
-
-void	free_split_arr(char **arr)
-{
-	size_t	i;
-
-	if (!arr)
-		return ;
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
 
 /**
  * creates a point and assigns x,y,z and links points as a singly linked list.
@@ -38,69 +23,32 @@ t_map	*add_point(t_map *map, int x, int y, int z)
 	point = malloc(sizeof(t_point));
 	if (!point)
 		return (NULL);
-	point->x = x * ZOOM + XOFF;
-	point->y = y * ZOOM + YOFF;
-	point->z = z * ZOOM;
-	point->color = P_COLOR;
-	(map->map)[y][x] = point;
+	point->x = x * map->zoom + map->xoff;
+	point->y = y * map->zoom + map->yoff;
+	point->z = z * map->zoom;
+	point->color = map->color;
+	(map->map_arr)[y][x] = point;
 	return (map);
 }
 
-t_map	*init_map_attributes(t_map *map)
+t_map	*malloc_map_rows(t_map *map, t_input *input)
 {
-	map = malloc(sizeof(t_map));
-	if (!map)
-		return (NULL);
-	map->zoom = 0;
-	map->xoff = 0;
-	map->yoff = 0;
-	map->xdeg = 0;
-	map->ydeg = 0;
-	map->clr_int = false;
-	return (map);
-}
-
-t_map	*init_map(t_map *map, t_input *input, char *map_name)
-{
-	int		nrows;
-
-	map = init_map_attributes(map);
-	if (!map)
-		return (NULL);
-	nrows = 0;
 	input->line = get_next_line(input->fd);
 	while (input->line)
 	{
 		free(input->line);
-		nrows++;
+		map->nrows++;
 		input->line = get_next_line(input->fd);
 	}
-	map->map = malloc(sizeof(t_point) * nrows);
-	if (!map->map)
-		return (NULL);
-	map->nrows = nrows;
-	close(input->fd);
 	free(input->line);
-	free(input);
-	input = init_input(input, map_name);
-	if (!input)
+	map->map_arr = malloc(sizeof(t_point) * map->nrows);
+	if (!map->map_arr)
+		return (perror("map_arr alloc failed"), NULL);
+	close(input->fd);
+	input->fd = open(input->map_file, O_RDONLY);
+	if (!input->fd)
 		return (NULL);
-	return (parse_map(map, input));
-}
-
-static int	n_sub_arr(char **s)
-{
-	int		n;
-
-	n = 0;
-	if (!s)
-		return (n);
-	while (*s)
-	{
-		s++;
-		n++;
-	}
-	return (n);
+	return (map);
 }
 
 /**
@@ -114,32 +62,31 @@ static int	n_sub_arr(char **s)
  * The horizontal position corresponds to its axis (x-axis).
  * The vertical position corresponds to its ordinate (y-axis).
  * The value corresponds to its altitude.
- * 
- * @param fd file descriptor to the map file
 */
 t_map	*parse_map(t_map *map, t_input *input)
 {
-	input->line = get_next_line(input->fd);
-	input->row = ft_split(input->line, ' ');
-	map->nclmns = n_sub_arr(input->row);
-	while (input->row && (map->nclmns == n_sub_arr(input->row)))
+	input = gnl_split(input);
+	map->nclmns = n_sub_arr(input->split_line);
+	while (input->split_line && (map->nclmns == n_sub_arr(input->split_line)))
 	{
-		(map->map)[input->y] = malloc(sizeof(t_point) * map->nclmns);
-		if (!((map->map)[input->y]))
+		(map->map_arr)[input->y] = malloc(sizeof(t_point) * map->nclmns);
+		if (!((map->map_arr)[input->y]))
 			return (NULL);
 		input->x = 0;
-		while (input->row[input->x])
+		while (input->split_line[input->x])
 		{
-			map = add_point(map, input->x, input->y, ft_atoi(input->row[input->x]));
+			map = add_point(map, input->x, input->y,
+				ft_atoi(input->split_line[input->x]));
 			if (!map)
 				return (NULL);
 			(input->x)++;
 		}
+		input = gnl_split(input);
 		(input->y)++;
-		free(input->line);
-		free_split_arr(input->row);
-		input->line = get_next_line(input->fd);
-		input->row = ft_split(input->line, ' ');
 	}
-	return (free(input->line), free_split_arr(input->row), free(input), map);
+	free(input->line);
+	free_split_arr(input->split_line);
+	free(input->map_file);
+	free(input);
+	return (map);
 }

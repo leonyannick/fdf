@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:33:59 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/09 11:16:29 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/10 17:14:35 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_point	*project_point(t_point *point, t_map *map)
 	temp->z = (double)point->z;
 	temp = rotate_yaxis(temp, (double)map->ydeg * DEG2RAD);
 	temp = rotate_xaxis(temp, (double)map->xdeg * DEG2RAD);
-	// temp = projection_to_2d(temp);
 	point->x = (int)round(temp->x);
 	point->y = (int)round(temp->y);
 	point->z = (int)temp->z;
@@ -58,22 +57,29 @@ t_point	*zoom_point(t_point *point, t_map *map)
 	return (point);
 }
 
-t_map	*change_points(t_map *map, t_point *(*f)(t_point *point, t_map *map))
+t_point	*random_point_color(t_point *point, t_map *map)
+{
+	point->color = ft_random(0xFF000000, 0x00FF0000);
+	return (point);
+}
+
+t_data	*paint_pixels(t_data *data, t_point *(*f)(t_point *point, t_map *map))
 {
 	int		row;
 	int		clmn;
 
 	row = 0;
-	while (row < map->nrows)
+	while (row < data->map->nrows)
 	{
 		clmn = 0;
-		while (clmn < (map->nclmns))
+		while (clmn < (data->map->nclmns))
 		{
-			(map->map)[row][clmn] = (*f)((map->map)[row][clmn], map);
+			(data->map->map_arr)[row][clmn]
+				= (*f)((data->map->map_arr)[row][clmn], data->map);
 			clmn++;
 		}
 		row++;
 	}
-	connect_the_dots(map);
-	return (map);
+	connect_the_dots(data);
+	return (data);
 }

@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 18:26:05 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/09 18:24:20 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/10 16:03:25 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @param line pointer to Bresenham struct
  * @return NULL if allocations fails OR pointer to allocated Bresenham struct
 */
-static t_bresenham	*init_line(t_point *p1, t_point *p2, t_bresenham *line, t_map *map)
+static t_bresenham	*init_line(t_point *p1, t_point *p2, t_bresenham *line)
 {
 	line = malloc(sizeof(t_bresenham));
 	if (!line)
@@ -55,60 +55,62 @@ static t_bresenham	*init_line(t_point *p1, t_point *p2, t_bresenham *line, t_map
  * @param p2 end point p2(x2,y2) 
  * @param img mlx_image
 */
-void	plot_line(t_point *p1, t_point *p2, t_map *map)
+void	plot_line(t_point *p1, t_point *p2, t_data *data)
 {
-	t_bresenham	*line;
+	t_bresenham	*l;
 
-	line = init_line(p1, p2, line, map);
-	if (!line)
+	l = init_line(p1, p2, l);
+	if (!l)
 		return ;
-	while (line->x != p2->x || line->y != p2->y)
+	while (l->x != p2->x || l->y != p2->y)
 	{
-		p1->color = line_color_inter(p1, p2, line, map);
-		if ((line->x >= 0) && (line->y >= 0) && (line->x <= WIDTH) && (line->y <= HEIGHT))
-			mlx_put_pixel(map->img, line->x, line->y, p1->color);
-		line->e2 = 2 * line->err;
-		if (line->e2 >= line->dy)
+		p1->color = line_color_inter(p1, p2, l, data->map);
+		if ((l->x >= 0) && (l->y >= 0) && (l->x <= WIDTH) && (l->y <= HEIGHT))
+			mlx_put_pixel(data->img, l->x, l->y, p1->color);
+		l->e2 = 2 * l->err;
+		if (l->e2 >= l->dy)
 		{
-			line->err += line->dy;
-			line->x += line->sx;
+			l->err += l->dy;
+			l->x += l->sx;
 		}
-		if (line->e2 <= line->dx)
+		if (l->e2 <= l->dx)
 		{
-			line->err += line->dx;
-			line->y += line->sy;
+			l->err += l->dx;
+			l->y += l->sy;
 		}
 	}
-	if ((line->x >= 0) && (line->y >= 0) && (line->x <= WIDTH) && (line->y <= HEIGHT))
-		mlx_put_pixel(map->img, line->x, line->y, p2->color);
-	free(line);
+	if ((l->x >= 0) && (l->y >= 0) && (l->x <= WIDTH) && (l->y <= HEIGHT))
+		mlx_put_pixel(data->img, l->x, l->y, p2->color);
+	free(l);
 }
 
-void	connect_the_dots(t_map *map)
+void	connect_the_dots(t_data *data)
 {
-	int		row;
-	int		clmn;
+	int		r;
+	int		c;
 
-	row = 0;
-	while (row < map->nrows)
+	r = 0;
+	while (r < data->map->nrows)
 	{
-		clmn = 0;
-		while (clmn < (map->nclmns - 1))
+		c = 0;
+		while (c < (data->map->nclmns - 1))
 		{
-			plot_line((map->map)[row][clmn], (map->map)[row][clmn + 1], map);
-			clmn++;
+			plot_line((data->map->map_arr)[r][c],
+				(data->map->map_arr)[r][c + 1], data);
+			c++;
 		}
-		row++;
+		r++;
 	}
-	clmn = 0;
-	while (clmn < map->nclmns)
+	c = 0;
+	while (c < data->map->nclmns)
 	{
-		row = 0;
-		while (row < (map->nrows - 1))
+		r = 0;
+		while (r < (data->map->nrows - 1))
 		{
-			plot_line((map->map)[row][clmn], (map->map)[row + 1][clmn], map);
-			row++;
+			plot_line((data->map->map_arr)[r][c],
+				(data->map->map_arr)[r + 1][c], data);
+			r++;
 		}
-		clmn++;
+		c++;
 	}
 }
