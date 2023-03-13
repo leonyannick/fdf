@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:52:40 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/10 17:00:47 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/13 19:23:05 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	main(int argc, char **argv)
 {
 	t_data	*data;
 
+	xdegree = XDEG;
+	ydegree = YDEG;
 
 	if (argc != 2)
 		return (ft_printf("Usage: ./fdf [mapfile] [options]\n"), EXIT_SUCCESS);
@@ -62,7 +64,6 @@ int	main(int argc, char **argv)
 	p2->color = 0x00FF00FF;
 	map->clr_int = true;
 	plot_line(p2, p1, map); */
-	
 
 	mlx_key_hook(data->mlx, &my_keyhook, data);
 	mlx_loop(data->mlx);

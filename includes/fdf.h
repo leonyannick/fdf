@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/13 12:29:13 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/13 19:23:48 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@
 # define ZOOM 10
 # define YOFF 100
 # define XOFF 100
-# define XDEG 215
-# define YDEG 225
-# define P_COLOR 0xFFFFFF
+# define XDEG 0
+# define YDEG 0
+# define P_COLOR 0xFFFFFFFF
 
 //step size for key presses
 # define S_ZOOM 1.1
@@ -49,6 +49,9 @@
 # define S_YDEG 5
 
 #define BPP sizeof(int32_t)
+
+int xdegree;
+int ydegree;
 
 typedef struct s_point
 {
@@ -147,6 +150,7 @@ t_point		*translate_point(t_point *point, t_map *map);
 t_point		*project_point(t_point *point, t_map *map);
 t_point		*zoom_point(t_point *point, t_map *map);
 t_point	*random_point_color(t_point *point, t_map *map);
+t_point	*point_color(t_point *point, t_map *map);
 
 //window stuff
 void	my_keyhook(mlx_key_data_t keydata, void* param);

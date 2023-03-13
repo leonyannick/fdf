@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+         #
+#    By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/19 09:17:44 by lbaumann          #+#    #+#              #
-#    Updated: 2023/03/10 12:53:48 by lbaumann         ###   ########.fr        #
+#    Updated: 2023/03/13 13:26:49 by lbaumann         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,8 @@ NAME = fdf
 
 CC = cc
 #CFLAGS = -Wall -Werror -Wextra
+
+UNAME := $(shell uname)
 
 ifeq ($(DEBUG), 1)
 CFLAGS = -g
@@ -50,10 +52,13 @@ LIBFTINCL = -L$(LIBFTDIR) -lft
 
 #mlx42
 MLX = $(MLXDIR)build/libmlx42.a
-#incl for mac
-#MLXINCL = $(MLX) -Iinclude -lglfw -L"/opt/homebrew/Cellar/glfw/3.3.8/lib/"
-#incl for linux
+
+ifeq ($(UNAME), Linux)
 MLXINCL = $(MLX) -Iinclude -ldl -lglfw -pthread -lm
+endif
+ifeq ($(UNAME), Darwin)
+MLXINCL = $(MLX) -Iinclude -lglfw -L"/opt/homebrew/Cellar/glfw/3.3.8/lib/"
+endif
 
 SRCS := $(addprefix $(SRCDIR), $(SRC))
 OBJ := $(SRC:.c=.o)

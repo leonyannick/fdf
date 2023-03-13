@@ -11,7 +11,7 @@
 	"args":["test_maps/input.fdf"],
 	"cwd":"${workspaceFolder}",
 	"request":"launch",
-	"MIMode":"gdb"
+	"MIMode":"lldb"
 	}
 	]
 }

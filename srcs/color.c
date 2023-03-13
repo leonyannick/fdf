@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:58:03 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/10 15:06:54 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/13 13:55:21 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	line_color_inter(t_point *start, t_point *end, t_bresenham *line, t_map *map
 	int		blue;
 
 	if (!map->clr_int)
-		return (0xFFFFFFFF);
+		return (map->color);
 	if (abs(line->dx) > abs(line->dy))
 		percentage = (double)(abs(line->x - end->x)) / (double)(abs(line->dx));
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:03:34 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/10 17:14:16 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/13 19:22:33 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,26 @@ static void	rotate(keys_t key, t_data *data)
 	data->map->xdeg = 0;
 	data->map->ydeg = 0;
 	if (key == MLX_KEY_Q)
+	{
+		xdegree += S_XDEG;
 		data->map->xdeg = S_XDEG;
+	}
 	if (key == MLX_KEY_W)
+	{
+		xdegree -= S_XDEG;
 		data->map->xdeg = -S_XDEG;
+	}
 	if (key == MLX_KEY_A)
+	{
 		data->map->ydeg = S_YDEG;
+		ydegree += S_YDEG;
+	}	
 	if (key == MLX_KEY_S)
+	{
+		ydegree -= S_YDEG;
 		data->map->ydeg = -S_YDEG;
+	}
+	printf ("xdeg:%i ydeg:%i\n", xdegree, ydegree);
 	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * BPP);
 	paint_pixels(data, &project_point);
 }
@@ -56,17 +69,16 @@ static void	rotate(keys_t key, t_data *data)
 static void	toggle_color(t_data *data)
 {
 	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * BPP);
-	if (data->map->clr_int)
+	if (!data->map->clr_int)
 	{
-		data = paint_pixels(data, &random_point_color);
-		data->map->clr_int = false;
+		data->map->clr_int = true;
+		paint_pixels(data, &random_point_color);
 	}
 	else
 	{
-		data = paint_pixels(data, &project_point);
-		data->map->clr_int = true;
+		data->map->clr_int = false;
+		paint_pixels(data, &point_color);
 	}
-	connect_the_dots(data);
 }
 
 void	my_keyhook(mlx_key_data_t keydata, void *param)

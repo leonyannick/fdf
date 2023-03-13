@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 18:26:05 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/10 16:03:25 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/13 17:17:18 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,16 @@ static t_bresenham	*init_line(t_point *p1, t_point *p2, t_bresenham *line)
 void	plot_line(t_point *p1, t_point *p2, t_data *data)
 {
 	t_bresenham	*l;
+	int	color;
 
 	l = init_line(p1, p2, l);
 	if (!l)
 		return ;
 	while (l->x != p2->x || l->y != p2->y)
 	{
-		p1->color = line_color_inter(p1, p2, l, data->map);
+		color = line_color_inter(p1, p2, l, data->map);
 		if ((l->x >= 0) && (l->y >= 0) && (l->x <= WIDTH) && (l->y <= HEIGHT))
-			mlx_put_pixel(data->img, l->x, l->y, p1->color);
+			mlx_put_pixel(data->img, l->x, l->y, color);
 		l->e2 = 2 * l->err;
 		if (l->e2 >= l->dy)
 		{
