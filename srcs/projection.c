@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   projection.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:36:26 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/13 18:04:07 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:46:58 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,18 @@
  * @param p point (vector) for multiplication
  * @param m 3x3 vector for multiplication
 */
-t_pointd	*vec_mat_mul(t_pointd *p, const double m[3][3])
+void	vec_mat_mul(t_pointd *p, const double m[3][3])
 {
-	t_pointd	*res;
+	double	x_temp;
+	double	y_temp;
+	double	z_temp;
 
-	res = malloc(sizeof(t_pointd));
-	if (!res)
-		return (NULL);
-	res->x = m[0][0] * p->x + m[0][1] * p->y + m[0][2] * p->z;
-	res->y = m[1][0] * p->x + m[1][1] * p->y + m[1][2] * p->z;
-	res->z = m[2][0] * p->x + m[2][1] * p->y + m[2][2] * p->z;
-	return (res);
+	x_temp = p->x;
+	y_temp = p->y;
+	z_temp = p->z;
+	p->x = m[0][0] * x_temp + m[0][1] * y_temp + m[0][2] * z_temp;
+	p->y = m[1][0] * x_temp + m[1][1] * y_temp + m[1][2] * z_temp;
+	p->z = m[2][0] * x_temp + m[2][1] * y_temp + m[2][2] * z_temp;
 }
 
 /**
@@ -39,14 +40,14 @@ t_pointd	*vec_mat_mul(t_pointd *p, const double m[3][3])
  * (multiply degree with macro DEG2RAD for radian value)
  * @param point point that is rotated
 */
-t_pointd	*rotate_xaxis(t_pointd *point, double rad)
+void	rotate_xaxis(t_pointd *point, double rad)
 {
 	const double	rot_x[3][3] = {
 	{1,			0,		0},
 	{0, cos(rad), sin(rad)},
 	{0, -sin(rad), cos(rad)}};
 
-	return (vec_mat_mul(point, rot_x));
+	vec_mat_mul(point, rot_x);
 }
 
 /**
@@ -55,14 +56,14 @@ t_pointd	*rotate_xaxis(t_pointd *point, double rad)
  * (multiply degree with macro DEG2RAD for radian value)
  * @param point point that is rotated
 */
-t_pointd	*rotate_yaxis(t_pointd *point, double rad)
+void	rotate_yaxis(t_pointd *point, double rad)
 {
 	const double	rot_y[3][3] = {
 	{cos(rad), 0, -sin(rad)},
 	{0,		1,			0},
 	{sin(rad), 0, cos(rad)}};
 
-	return (vec_mat_mul(point, rot_y));
+	vec_mat_mul(point, rot_y);
 }
 
 /**

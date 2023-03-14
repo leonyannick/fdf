@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:22:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/10 12:54:45 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:06:04 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	n_sub_arr(char **s)
 	return (n);
 }
 
-t_input	*gnl_split(t_input *input)
+void	gnl_split(t_input *input)
 {
 	if (input->line)
 		free(input->line);
@@ -71,6 +71,5 @@ t_input	*gnl_split(t_input *input)
 		free_split_arr(input->split_line);
 	input->line = get_next_line(input->fd);
 	input->split_line = ft_split(input->line, ' ');
-	return (input);
 }
 

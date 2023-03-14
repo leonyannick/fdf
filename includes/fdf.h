@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/13 19:23:48 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:05:40 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <stdbool.h>
 
 //mlx window size
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 700
+# define HEIGHT 700
 
 //deg = rad * (180 / pi)
 # define RAD2DEG 57.295779513082323
@@ -34,11 +34,11 @@
 # define DEG2RAD 0.017453292519943
 
 //initial map attributes (isometric proj)
-# define ZOOM 10
-# define YOFF 100
+# define ZOOM 25
+# define YOFF 1500
 # define XOFF 100
-# define XDEG 0
-# define YDEG 0
+# define XDEG 290//35 + 45 * 6
+# define YDEG 10//45 + 45 * 6
 # define P_COLOR 0xFFFFFFFF
 
 //step size for key presses
@@ -49,9 +49,6 @@
 # define S_YDEG 5
 
 #define BPP sizeof(int32_t)
-
-int xdegree;
-int ydegree;
 
 typedef struct s_point
 {
@@ -142,7 +139,7 @@ t_map		*add_point(t_map *map, int x, int y, int z);
 void		print_map(t_map *map);
 void		free_split_arr(char **arr);
 int			n_sub_arr(char **s);
-t_input		*gnl_split(t_input *input);
+void		gnl_split(t_input *input);
 
 //point operations
 t_data	*paint_pixels(t_data *data, t_point *(*f)(t_point *point, t_map *map));
@@ -156,9 +153,9 @@ t_point	*point_color(t_point *point, t_map *map);
 void	my_keyhook(mlx_key_data_t keydata, void* param);
 
 //projection
-t_pointd	*rotate_yaxis(t_pointd *point, double rad);
-t_pointd	*rotate_xaxis(t_pointd *point, double rad);
-t_pointd	*vec_mat_mul(t_pointd *p, const double m[3][3]);
+void	rotate_yaxis(t_pointd *point, double rad);
+void	vec_mat_mul(t_pointd *p, const double m[3][3]);
+void	rotate_xaxis(t_pointd *point, double rad);
 
 //color
 int	line_color_inter(t_point *start, t_point *end, t_bresenham *line, t_map *map);

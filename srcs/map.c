@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/10 13:06:09 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:13:30 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,15 @@ t_map	*malloc_map_rows(t_map *map, t_input *input)
 		input->line = get_next_line(input->fd);
 	}
 	free(input->line);
-	map->map_arr = malloc(sizeof(t_point) * map->nrows);
+	map->map_arr = malloc(sizeof(t_point *) * map->nrows);
 	if (!map->map_arr)
 		return (perror("map_arr alloc failed"), NULL);
 	close(input->fd);
 	input->fd = open(input->map_file, O_RDONLY);
 	if (!input->fd)
 		return (NULL);
+	input->line = NULL;
+	input->split_line = NULL;
 	return (map);
 }
 
@@ -65,10 +67,12 @@ t_map	*malloc_map_rows(t_map *map, t_input *input)
 */
 t_map	*parse_map(t_map *map, t_input *input)
 {
-	input = gnl_split(input);
+	gnl_split(input);
 	map->nclmns = n_sub_arr(input->split_line);
-	while (input->split_line && (map->nclmns == n_sub_arr(input->split_line)))
+	while (input->split_line)
 	{
+		if (map->nclmns != n_sub_arr(input->split_line))
+			return (perror("unregular number of elements in line"), NULL);
 		(map->map_arr)[input->y] = malloc(sizeof(t_point) * map->nclmns);
 		if (!((map->map_arr)[input->y]))
 			return (NULL);
@@ -81,12 +85,11 @@ t_map	*parse_map(t_map *map, t_input *input)
 				return (NULL);
 			(input->x)++;
 		}
-		input = gnl_split(input);
+		gnl_split(input);
 		(input->y)++;
 	}
 	free(input->line);
 	free_split_arr(input->split_line);
 	free(input->map_file);
-	free(input);
-	return (map);
+	return (free(input), map);
 }

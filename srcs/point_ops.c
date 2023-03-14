@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   point_ops.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:33:59 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/13 19:04:19 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:50:30 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ t_point	*project_point(t_point *point, t_map *map)
 	temp->x = (double)point->x;
 	temp->y = (double)point->y;
 	temp->z = (double)point->z;
-	temp = rotate_yaxis(temp, (double)map->ydeg * DEG2RAD);
-	temp = rotate_xaxis(temp, (double)map->xdeg * DEG2RAD);
-	point->x = (int)round(temp->x);
-	point->y = (int)round(temp->y);
-	point->z = (int)round(temp->z);
+	rotate_yaxis(temp, (double)map->ydeg * DEG2RAD);
+	rotate_xaxis(temp, (double)map->xdeg * DEG2RAD);
+	point->x = (int)(temp->x);
+	point->y = (int)(temp->y);
+	point->z = (int)(temp->z);
 	free(temp);
 	return (point);
 }
@@ -46,13 +46,13 @@ t_point	*zoom_point(t_point *point, t_map *map)
 {
 	if (map->zoom)
 	{
-		point->x = round((float)point->x * S_ZOOM);
-		point->y = round((float)point->y * S_ZOOM);
+		point->x = (int)((float)point->x * S_ZOOM);
+		point->y = (int)((float)point->y * S_ZOOM);
 	}
 	else
 	{
-		point->x = round((float)point->x / S_ZOOM);
-		point->y = round((float)point->y / S_ZOOM);
+		point->x = (int)((float)point->x / S_ZOOM);
+		point->y = (int)((float)point->y / S_ZOOM);
 	}
 	return (point);
 }

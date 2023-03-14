@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:52:40 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/13 19:23:05 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:50:16 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,6 @@ int	main(int argc, char **argv)
 {
 	t_data	*data;
 
-	xdegree = XDEG;
-	ydegree = YDEG;
-
 	if (argc != 2)
 		return (ft_printf("Usage: ./fdf [mapfile] [options]\n"), EXIT_SUCCESS);
 	data = init_data(data, argv[1]);
@@ -69,5 +66,6 @@ int	main(int argc, char **argv)
 	mlx_loop(data->mlx);
 	mlx_terminate(data->mlx);
 	free_map(data->map);
+	free(data);
 	return (EXIT_SUCCESS);
 }
