@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:03:34 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 10:19:40 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 16:11:27 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	translate(keys_t key, t_data *data)
 		data->map->yoff = -S_YOFF;
 	if (key == MLX_KEY_DOWN)
 		data->map->yoff = S_YOFF;
-	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * BPP);
+	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
 	paint_pixels(data, &translate_point);
 }
 
@@ -33,7 +33,7 @@ static void	zoom(keys_t key, t_data *data)
 	data->map->zoom = 0;
 	if (key == MLX_KEY_EQUAL)
 		data->map->zoom = 1;
-	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * BPP);
+	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
 	paint_pixels(data, &zoom_point);
 }
 
@@ -42,28 +42,20 @@ static void	rotate(keys_t key, t_data *data)
 	data->map->xdeg = 0;
 	data->map->ydeg = 0;
 	if (key == MLX_KEY_Q)
-	{
 		data->map->xdeg = S_XDEG;
-	}
 	if (key == MLX_KEY_W)
-	{
 		data->map->xdeg = -S_XDEG;
-	}
 	if (key == MLX_KEY_A)
-	{
 		data->map->ydeg = S_YDEG;
-	}	
 	if (key == MLX_KEY_S)
-	{
 		data->map->ydeg = -S_YDEG;
-	}
-	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * BPP);
+	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
 	paint_pixels(data, &project_point);
 }
 
 static void	toggle_color(t_data *data)
 {
-	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * BPP);
+	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
 	if (!data->map->clr_int)
 	{
 		data->map->clr_int = true;

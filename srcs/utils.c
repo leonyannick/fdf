@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:22:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 15:06:04 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:53:04 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,3 +73,25 @@ void	gnl_split(t_input *input)
 	input->split_line = ft_split(input->line, ' ');
 }
 
+void	free_map(t_map *map)
+{
+	int	row;
+	int	clmn;
+
+	if (!map && !(map->map_arr))
+		return ;
+	row = 0;
+	while (row < map->nrows)
+	{
+		clmn = 0;
+		while (clmn < map->nclmns)
+		{
+			free((map->map_arr)[row][clmn]);
+			clmn++;
+		}
+		free((map->map_arr)[row]);
+		row++;
+	}
+	free(map->map_arr);
+	free(map);
+}

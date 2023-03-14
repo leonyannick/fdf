@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:58:03 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/13 13:55:21 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:09:42 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
 
-int ft_random(int min, int max)
-{
-	return min + rand() / (RAND_MAX / (max - min + 1) + 1);
-}
-
-int	get_rgba(int r, int g, int b, int a)
+static int	get_rgba(int r, int g, int b, int a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
-int	get_light(int start, int end, double percentage)
+static int	get_light(int start, int end, double percent)
 {
-	return ((int)((1 - percentage) * (double)start + percentage * (double)end));
+	return ((int)((1 - percent) * (double)start + percent * (double)end));
 }
 
-int	line_color_inter(t_point *start, t_point *end, t_bresenham *line, t_map *map)
+int	ft_random(int min, int max)
+{
+	return (min + rand() / (RAND_MAX / (max - min + 1) + 1));
+}
+
+int	line_clr_inter(t_point *st, t_point *end, t_bresenham *l, t_map *map)
 {
 	double	percentage;
 	int		red;
@@ -36,14 +36,16 @@ int	line_color_inter(t_point *start, t_point *end, t_bresenham *line, t_map *map
 
 	if (!map->clr_int)
 		return (map->color);
-	if (abs(line->dx) > abs(line->dy))
-		percentage = (double)(abs(line->x - end->x)) / (double)(abs(line->dx));
+	if (abs(l->dx) > abs(l->dy))
+		percentage = (double)(abs((int)l->x - (int)end->x)) / (double)(abs((int)l->dx));
 	else
-		percentage = (double)(abs(line->y - end->y)) / (double)(abs(line->dy));
+		percentage = (double)(abs((int)l->y - (int)end->y)) / (double)(abs((int)l->dy));
 	percentage = 1 - percentage;
-	
-	red = get_light((start->color >> 24) & 0xFF, (end->color >> 24) & 0xFF, percentage);
-	green = get_light((start->color >> 16) & 0xFF, (end->color >> 16) & 0xFF, percentage);
-	blue = get_light((start->color >> 8) & 0xFF, (end->color >> 8) & 0xFF, percentage);
+	red = get_light((st->color >> 24) & 0xFF, (end->color >> 24) & 0xFF,
+			percentage);
+	green = get_light((st->color >> 16) & 0xFF, (end->color >> 16) & 0xFF,
+			percentage);
+	blue = get_light((st->color >> 8) & 0xFF, (end->color >> 8) & 0xFF,
+			percentage);
 	return (get_rgba(red, green, blue, 255));
 }

@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 15:05:40 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:05:22 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <stdbool.h>
 
 //mlx window size
-# define WIDTH 700
-# define HEIGHT 700
+# define WIDTH 1000
+# define HEIGHT 1000
 
 //deg = rad * (180 / pi)
 # define RAD2DEG 57.295779513082323
@@ -43,27 +43,21 @@
 
 //step size for key presses
 # define S_ZOOM 1.1
-# define S_YOFF 10
-# define S_XOFF 10
+# define S_YOFF 50
+# define S_XOFF 50
 # define S_XDEG 5
 # define S_YDEG 5
 
-#define BPP sizeof(int32_t)
+//sizeof(int32_t) for setting all pixels with memset
+# define SZ 4
 
 typedef struct s_point
-{
-	int				x;
-	int				y;
-	int				z;
-	int				color;
-}t_point;
-
-typedef struct s_pointd
 {
 	double				x;
 	double				y;
 	double				z;
-}t_pointd;
+	int				color;
+}t_point;
 
 typedef struct s_map
 {
@@ -92,7 +86,7 @@ typedef struct s_input
 typedef struct s_data
 {
 	t_map		*map;
-	mlx_t*		mlx;
+	mlx_t		*mlx;
 	mlx_image_t	*img;
 	t_input		*input;
 }t_data;
@@ -122,44 +116,45 @@ typedef struct s_bresenham
 }t_bresenham;
 
 //init_data
-t_data		*init_data(t_data *data, char	*map_file);
-t_input		*init_input(t_input *input, char *map_file);
-t_map		*init_map(t_data *data, char *map_file);
+t_data	*init_data(t_data *data, char	*map_file);
+t_input	*init_input(t_input *input, char *map_file);
+t_map	*init_map(t_data *data, char *map_file);
 
 //line plotting
-void		plot_line(t_point *p1, t_point *p2, t_data *data);
-void		connect_the_dots(t_data *data);
+void	plot_line(t_point *p1, t_point *p2, t_data *data);
+void	connect_the_dots(t_data *data);
+void	*point_color(t_point *point, t_map *map);
 
 //map
-t_map		*malloc_map_rows(t_map *map, t_input *input);
-t_map		*parse_map(t_map *map, t_input *input);
-t_map		*add_point(t_map *map, int x, int y, int z);
+t_map	*malloc_map_rows(t_map *map, t_input *input);
+t_map	*parse_map(t_map *map, t_input *input);
+t_map	*add_point(t_map *map, int x, int y, int z);
 
 //utils
-void		print_map(t_map *map);
-void		free_split_arr(char **arr);
-int			n_sub_arr(char **s);
-void		gnl_split(t_input *input);
+void	print_map(t_map *map);
+void	free_split_arr(char **arr);
+int		n_sub_arr(char **s);
+void	gnl_split(t_input *input);
+void	free_map(t_map *map);
 
 //point operations
-t_data	*paint_pixels(t_data *data, t_point *(*f)(t_point *point, t_map *map));
-t_point		*translate_point(t_point *point, t_map *map);
-t_point		*project_point(t_point *point, t_map *map);
-t_point		*zoom_point(t_point *point, t_map *map);
-t_point	*random_point_color(t_point *point, t_map *map);
-t_point	*point_color(t_point *point, t_map *map);
+t_data	*paint_pixels(t_data *data, void *(*f)(t_point *point, t_map *map));
+void	*translate_point(t_point *point, t_map *map);
+void	*project_point(t_point *point, t_map *map);
+void	*zoom_point(t_point *point, t_map *map);
+void	*random_point_color(t_point *point, t_map *map);
 
 //window stuff
-void	my_keyhook(mlx_key_data_t keydata, void* param);
+void	my_keyhook(mlx_key_data_t keydata, void *param);
 
 //projection
-void	rotate_yaxis(t_pointd *point, double rad);
-void	vec_mat_mul(t_pointd *p, const double m[3][3]);
-void	rotate_xaxis(t_pointd *point, double rad);
+void	rotate_yaxis(t_point *point, double rad);
+void	vec_mat_mul(t_point *p, const double m[3][3]);
+void	rotate_xaxis(t_point *point, double rad);
 
 //color
-int	line_color_inter(t_point *start, t_point *end, t_bresenham *line, t_map *map);
-int ft_random(int min, int max);
+int		line_clr_inter(t_point *st, t_point *end, t_bresenham *l, t_map *map);
+int		ft_random(int min, int max);
 
 //main
 t_input	*init_input(t_input *input, char *map_name);

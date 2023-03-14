@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:36:26 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 14:46:58 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:04:57 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @param p point (vector) for multiplication
  * @param m 3x3 vector for multiplication
 */
-void	vec_mat_mul(t_pointd *p, const double m[3][3])
+void	vec_mat_mul(t_point *p, const double m[3][3])
 {
 	double	x_temp;
 	double	y_temp;
@@ -40,7 +40,7 @@ void	vec_mat_mul(t_pointd *p, const double m[3][3])
  * (multiply degree with macro DEG2RAD for radian value)
  * @param point point that is rotated
 */
-void	rotate_xaxis(t_pointd *point, double rad)
+void	rotate_xaxis(t_point *point, double rad)
 {
 	const double	rot_x[3][3] = {
 	{1,			0,		0},
@@ -56,7 +56,7 @@ void	rotate_xaxis(t_pointd *point, double rad)
  * (multiply degree with macro DEG2RAD for radian value)
  * @param point point that is rotated
 */
-void	rotate_yaxis(t_pointd *point, double rad)
+void	rotate_yaxis(t_point *point, double rad)
 {
 	const double	rot_y[3][3] = {
 	{cos(rad), 0, -sin(rad)},

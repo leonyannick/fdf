@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 15:13:30 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/14 16:25:17 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_map	*parse_map(t_map *map, t_input *input)
 		while (input->split_line[input->x])
 		{
 			map = add_point(map, input->x, input->y,
-				ft_atoi(input->split_line[input->x]));
+					ft_atoi(input->split_line[input->x]));
 			if (!map)
 				return (NULL);
 			(input->x)++;
