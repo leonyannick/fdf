@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 10:40:33 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 17:34:56 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 
 //initial map attributes (isometric proj)
 # define ZOOM 25
-# define YOFF 1500
+# define YOFF 500
 # define XOFF 100
 # define XDEG 290//35 + 45 * 6
 # define YDEG 10//45 + 45 * 6
@@ -149,6 +149,7 @@ void	*translate_point(t_point *point, t_map *map);
 void	*project_point(t_point *point, t_map *map);
 void	*zoom_point(t_point *point, t_map *map);
 void	*random_point_color(t_point *point, t_map *map);
+void	*reset(t_point *point, t_map *map);
 
 //window stuff
 void	my_keyhook(mlx_key_data_t keydata, void *param);

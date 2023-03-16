@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:33:59 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 10:29:49 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:05:14 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,13 @@ void	*random_point_color(t_point *point, t_map *map)
 void	*point_color(t_point *point, t_map *map)
 {
 	point->color = map->color;
+	return (map);
+}
+
+void	*reset(t_point *point, t_map *map)
+{
+	point->x = point->x_init;
+	point->y = point->y_init;
+	point->z = point->z_init;
 	return (map);
 }

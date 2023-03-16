@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:52:40 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 08:36:53 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 11:14:34 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv)
 	data = init_data(data, argv[1]);
 	if (!data)
 		return (perror("data init failed"), EXIT_FAILURE);
-	paint_pixels(data, project_point);
+	paint_pixels(data, &project_point);
 	mlx_key_hook(data->mlx, &my_keyhook, data);
 	mlx_loop(data->mlx);
 	mlx_terminate(data->mlx);

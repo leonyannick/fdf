@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:55:09 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 10:23:45 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:11:35 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ t_map	*init_map(t_data *data, char *map_file)
 	data->map = malloc(sizeof(t_map));
 	if (!data->map)
 		return (perror("map alloc failed"), NULL);
-	data->map->zoom = ZOOM;
-	data->map->xoff = XOFF;
-	data->map->yoff = YOFF;
+	data->map->zoom = 0;
+	data->map->xoff = 0;
+	data->map->yoff = 0;
 	data->map->xdeg = XDEG;
 	data->map->ydeg = YDEG;
-	data->map->zdeg = ZDEG;
+	data->map->zdeg = 0;
 	data->map->nrows = 0;
 	data->map->nclmns = 0;
 	data->map->color = P_COLOR;

@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 10:48:20 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:02:25 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ t_map	*add_point(t_map *map, int x, int y, int z)
 	point = malloc(sizeof(t_point));
 	if (!point)
 		return (NULL);
-	point->x_init = x * map->zoom + map->xoff;
-	point->y_init = y * map->zoom + map->yoff;
-	point->z_init = z * map->zoom;
+	point->x_init = x * ZOOM + XOFF;
+	point->y_init = y * ZOOM + YOFF;
+	point->z_init = z * ZOOM;
 	point->x = point->x_init;
 	point->y = point->y_init;
 	point->z = point->z_init;
-	point->color = map->color;
+	point->color = P_COLOR;
 	(map->map_arr)[y][x] = point;
 	return (map);
 }

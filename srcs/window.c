@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:03:34 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 10:26:43 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:13:01 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ static void	translate(keys_t key, t_data *data)
 
 static void	zoom(keys_t key, t_data *data)
 {
-	data->map->zoom = 0;
 	if (key == MLX_KEY_EQUAL)
 		data->map->zoom = 1;
-	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
+	if (key == MLX_KEY_MINUS)
+		data->map->zoom = 0;
 	paint_pixels(data, &zoom_point);
 }
 
@@ -41,6 +41,7 @@ static void	rotate(keys_t key, t_data *data)
 {
 	data->map->xdeg = 0;
 	data->map->ydeg = 0;
+	data->map->zdeg = 0;
 	if (key == MLX_KEY_Q)
 		data->map->xdeg = S_XDEG;
 	if (key == MLX_KEY_W)
@@ -53,13 +54,11 @@ static void	rotate(keys_t key, t_data *data)
 		data->map->zdeg = S_ZDEG;
 	if (key == MLX_KEY_X)
 		data->map->zdeg = -S_ZDEG;
-	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
 	paint_pixels(data, &project_point);
 }
 
 static void	toggle_color(t_data *data)
 {
-	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
 	if (!data->map->clr_int)
 	{
 		data->map->clr_int = true;
@@ -70,6 +69,15 @@ static void	toggle_color(t_data *data)
 		data->map->clr_int = false;
 		paint_pixels(data, &point_color);
 	}
+}
+
+void	backview(t_data *data)
+{
+	paint_pixels(data, &reset);
+	data->map->xdeg = 90;
+	data->map->ydeg = 180;
+	data->map->zdeg = 180;
+	paint_pixels(data, &project_point);
 }
 
 void	my_keyhook(mlx_key_data_t keydata, void *param)
@@ -91,4 +99,8 @@ void	my_keyhook(mlx_key_data_t keydata, void *param)
 		zoom(keydata.key, data);
 	if (keydata.key == MLX_KEY_C && keydata.action == MLX_PRESS)
 		toggle_color(data);
+	if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
+		paint_pixels(data, &reset);
+	if (keydata.key == MLX_KEY_F && keydata.action == MLX_PRESS)
+		backview(data);
 }

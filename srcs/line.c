@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 18:26:05 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 08:44:58 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 17:52:55 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ t_data	*paint_pixels(t_data *data, void *(*f)(t_point *point, t_map *map))
 	int		clmn;
 
 	row = 0;
+	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
 	while (row < data->map->nrows)
 	{
 		clmn = 0;
