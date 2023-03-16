@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:55:09 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 17:07:31 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 10:23:45 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ t_data	*init_data(t_data *data, char	*map_file)
 		return (perror("data->input init failed"), NULL);
 	data->map = init_map(data, map_file);
 	if (!data->map)
-	// 	return (perror("data->map init failed"), NULL);
-	// data->mlx = mlx_init(WIDTH, HEIGHT, "fdf", true);
-	// if (!data->mlx)
-	// 	return (perror("data->mlx init failed"), NULL);
-	// data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
-	// if (!data->img || (mlx_image_to_window(data->mlx, data->img, 0, 0) < 0))
-	// 	return (perror("data->img init failed"), NULL);
+		return (perror("data->map init failed"), NULL);
+	data->mlx = mlx_init(WIDTH, HEIGHT, "fdf", true);
+	if (!data->mlx)
+		return (perror("data->mlx init failed"), NULL);
+	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	if (!data->img || (mlx_image_to_window(data->mlx, data->img, 0, 0) < 0))
+		return (perror("data->img init failed"), NULL);
 	return (data);
 }
 
@@ -56,6 +56,7 @@ t_map	*init_map(t_data *data, char *map_file)
 	data->map->yoff = YOFF;
 	data->map->xdeg = XDEG;
 	data->map->ydeg = YDEG;
+	data->map->zdeg = ZDEG;
 	data->map->nrows = 0;
 	data->map->nclmns = 0;
 	data->map->color = P_COLOR;

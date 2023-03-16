@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 17:05:22 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 10:40:33 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define XOFF 100
 # define XDEG 290//35 + 45 * 6
 # define YDEG 10//45 + 45 * 6
+# define ZDEG 0
 # define P_COLOR 0xFFFFFFFF
 
 //step size for key presses
@@ -47,6 +48,7 @@
 # define S_XOFF 50
 # define S_XDEG 5
 # define S_YDEG 5
+# define S_ZDEG 5
 
 //sizeof(int32_t) for setting all pixels with memset
 # define SZ 4
@@ -56,6 +58,9 @@ typedef struct s_point
 	double				x;
 	double				y;
 	double				z;
+	double				x_init;
+	double				y_init;
+	double				z_init;
 	int				color;
 }t_point;
 
@@ -64,11 +69,12 @@ typedef struct s_map
 	t_point		***map_arr;
 	int			nrows;
 	int			nclmns;
-	float		zoom;
+	double		zoom;
 	int			yoff;
 	int			xoff;
 	int			xdeg;
 	int			ydeg;
+	int			zdeg;
 	int			color;
 	bool		clr_int;
 }t_map;
@@ -151,6 +157,7 @@ void	my_keyhook(mlx_key_data_t keydata, void *param);
 void	rotate_yaxis(t_point *point, double rad);
 void	vec_mat_mul(t_point *p, const double m[3][3]);
 void	rotate_xaxis(t_point *point, double rad);
+void	rotate_zaxis(t_point *point, double rad);
 
 //color
 int		line_clr_inter(t_point *st, t_point *end, t_bresenham *l, t_map *map);

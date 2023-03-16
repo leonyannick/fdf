@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:22:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 15:53:04 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 08:22:05 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	print_map(t_map *map)
 		while (clmn < map->nclmns)
 		{
 			pt = (map->map_arr)[row][clmn];
-			printf("(%i,%i)\033[35;1m%i\033[0m\t", pt->x, pt->y, pt->z);
+			printf("(%i,%i)\033[35;1m%i\033[0m\t", (int)pt->x, (int)pt->y, (int)pt->z);
 			clmn++;
 		}
 		printf("\n");

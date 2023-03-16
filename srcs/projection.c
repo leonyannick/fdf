@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   projection.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:36:26 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 17:04:57 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 10:21:01 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@ void	rotate_yaxis(t_point *point, double rad)
 	{cos(rad), 0, -sin(rad)},
 	{0,		1,			0},
 	{sin(rad), 0, cos(rad)}};
+
+	vec_mat_mul(point, rot_y);
+}
+
+void	rotate_zaxis(t_point *point, double rad)
+{
+	const double	rot_y[3][3] = {
+	{cos(rad), sin(rad),	0},
+	{-sin(rad), cos(rad),	0},
+	{0,			0,	1}};
 
 	vec_mat_mul(point, rot_y);
 }

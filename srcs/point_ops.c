@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   point_ops.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:33:59 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 17:04:36 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 10:29:49 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 */
 void	*project_point(t_point *point, t_map *map)
 {
+	rotate_zaxis(point, (double)map->zdeg * DEG2RAD);
 	rotate_yaxis(point, (double)map->ydeg * DEG2RAD);
 	rotate_xaxis(point, (double)map->xdeg * DEG2RAD);
 	return (map);
@@ -34,13 +35,13 @@ void	*zoom_point(t_point *point, t_map *map)
 {
 	if (map->zoom)
 	{
-		point->x = (int)((float)point->x * S_ZOOM);
-		point->y = (int)((float)point->y * S_ZOOM);
+		point->x *= S_ZOOM;
+		point->y *= S_ZOOM;
 	}
 	else
 	{
-		point->x = (int)((float)point->x / S_ZOOM);
-		point->y = (int)((float)point->y / S_ZOOM);
+		point->x /= S_ZOOM;
+		point->y /= S_ZOOM;
 	}
 	return (map);
 }

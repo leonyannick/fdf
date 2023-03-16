@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 18:26:05 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 17:07:23 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 08:44:58 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static t_bresenham	*init_line(t_point *p1, t_point *p2, t_bresenham *line)
 	line = malloc(sizeof(t_bresenham));
 	if (!line)
 		return (NULL);
-	line->dx = abs(p2->x - p1->x);
-	line->dy = -abs(p2->y - p1->y);
+	line->dx = abs((int)p2->x - (int)p1->x);
+	line->dy = -abs((int)p2->y - (int)p1->y);
 	line->err = line->dx + line->dy;
-	line->x = p1->x;
-	line->y = p1->y;
+	line->x = (int)p1->x;
+	line->y = (int)p1->y;
 	if (p1->x > p2->x)
 		line->sx = -1;
 	else
@@ -62,7 +62,7 @@ void	plot_line(t_point *p1, t_point *p2, t_data *data)
 	l = init_line(p1, p2, l);
 	if (!l)
 		return ;
-	while (l->x != p2->x || l->y != p2->y)
+	while (l->x != (int)p2->x || l->y != (int)p2->y)
 	{
 		if ((l->x >= 0) && (l->y >= 0) && (l->x < WIDTH) && (l->y < HEIGHT))
 			mlx_put_pixel(data->img, l->x, l->y,
@@ -126,6 +126,6 @@ t_data	*paint_pixels(t_data *data, void *(*f)(t_point *point, t_map *map))
 		}
 		row++;
 	}
-	//connect_the_dots(data);
+	connect_the_dots(data);
 	return (data);
 }

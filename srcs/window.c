@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:03:34 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/14 16:11:27 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/16 10:26:43 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ static void	rotate(keys_t key, t_data *data)
 		data->map->ydeg = S_YDEG;
 	if (key == MLX_KEY_S)
 		data->map->ydeg = -S_YDEG;
+	if (key == MLX_KEY_Z)
+		data->map->zdeg = S_ZDEG;
+	if (key == MLX_KEY_X)
+		data->map->zdeg = -S_ZDEG;
 	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
 	paint_pixels(data, &project_point);
 }
@@ -74,7 +78,8 @@ void	my_keyhook(mlx_key_data_t keydata, void *param)
 
 	data = (t_data *)param;
 	if ((keydata.key == MLX_KEY_Q || keydata.key == MLX_KEY_W
-			|| keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_S)
+			|| keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_S
+			|| keydata.key == MLX_KEY_Z || keydata.key == MLX_KEY_X)
 		&& (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 		rotate(keydata.key, data);
 	if ((keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT
@@ -84,6 +89,6 @@ void	my_keyhook(mlx_key_data_t keydata, void *param)
 	if ((keydata.key == MLX_KEY_EQUAL || keydata.key == MLX_KEY_MINUS)
 		&& (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 		zoom(keydata.key, data);
-	if (keydata.key == MLX_KEY_Z && keydata.action == MLX_PRESS)
+	if (keydata.key == MLX_KEY_C && keydata.action == MLX_PRESS)
 		toggle_color(data);
 }
