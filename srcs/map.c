@@ -6,15 +6,16 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 18:02:25 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:56:33 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
 
 /**
- * creates a point and assigns x,y,z and links points as a singly linked list.
- * saves origin (0,0) in map struct
+ * creates a point and assigns x,y,z with the initial values for zoom and
+ * yoff/xoff (from macros in header file). saves the initial values in init 
+ * variable, so they can be restored later
 */
 t_map	*add_point(t_map *map, int x, int y, int z)
 {
@@ -34,6 +35,11 @@ t_map	*add_point(t_map *map, int x, int y, int z)
 	return (map);
 }
 
+/**
+ * goes through file with gnl and counts how many rows there are, so that
+ * map_arr can be allocated accordingly. after parsing file is closed and
+ * opened again, for actual data copying in parse_map function
+*/
 t_map	*malloc_map_rows(t_map *map, t_input *input)
 {
 	input->line = get_next_line(input->fd);
@@ -57,8 +63,14 @@ t_map	*malloc_map_rows(t_map *map, t_input *input)
 }
 
 /**
- * - parses the map from the input file
+ * parses the map from the input file and saves each point in map_arr.
+ * gnl is used to fetch each line, split is used to break up the line
+ * in the individual numbers that are converted from char to int with
+ * atoi. returns from gnl and split have to be saved in variables, to
+ * be able to free the memory after having saved the data. input struct
+ * is freed after parsing, because it is not used afterwards
  * 
+ * file structure:
  * (x, y)
  * --> [x]	(0,0) (1,0) (2,0) (3,0)
  * |		(0,1) (1,1) (2,1) (3,1)
@@ -67,6 +79,9 @@ t_map	*malloc_map_rows(t_map *map, t_input *input)
  * The horizontal position corresponds to its axis (x-axis).
  * The vertical position corresponds to its ordinate (y-axis).
  * The value corresponds to its altitude.
+ * 
+ * map_arr structure:
+ * map_arr[y][x]
 */
 t_map	*parse_map(t_map *map, t_input *input)
 {
@@ -82,9 +97,8 @@ t_map	*parse_map(t_map *map, t_input *input)
 		input->x = 0;
 		while (input->split_line[input->x])
 		{
-			map = add_point(map, input->x, input->y,
-					ft_atoi(input->split_line[input->x]));
-			if (!map)
+			if (!add_point(map, input->x, input->y,
+					ft_atoi(input->split_line[input->x])))
 				return (NULL);
 			(input->x)++;
 		}
@@ -94,5 +108,6 @@ t_map	*parse_map(t_map *map, t_input *input)
 	free(input->line);
 	free_split_arr(input->split_line);
 	free(input->map_file);
-	return (free(input), map);
+	free(input);
+	return (map);
 }

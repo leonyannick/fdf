@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 17:34:56 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:24:32 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
 # define ZOOM 25
 # define YOFF 500
 # define XOFF 100
-# define XDEG 290//35 + 45 * 6
-# define YDEG 10//45 + 45 * 6
+# define XDEG 290
+# define YDEG 10
 # define ZDEG 0
 # define P_COLOR 0xFFFFFFFF
 
@@ -61,7 +61,7 @@ typedef struct s_point
 	double				x_init;
 	double				y_init;
 	double				z_init;
-	int				color;
+	int					color;
 }t_point;
 
 typedef struct s_map
@@ -123,13 +123,13 @@ typedef struct s_bresenham
 
 //init_data
 t_data	*init_data(t_data *data, char	*map_file);
-t_input	*init_input(t_input *input, char *map_file);
-t_map	*init_map(t_data *data, char *map_file);
 
 //line plotting
 void	plot_line(t_point *p1, t_point *p2, t_data *data);
+
+//draw
+t_data	*paint_pixels(t_data *data, void *(*f)(t_point *point, t_map *map));
 void	connect_the_dots(t_data *data);
-void	*point_color(t_point *point, t_map *map);
 
 //map
 t_map	*malloc_map_rows(t_map *map, t_input *input);
@@ -144,27 +144,29 @@ void	gnl_split(t_input *input);
 void	free_map(t_map *map);
 
 //point operations
-t_data	*paint_pixels(t_data *data, void *(*f)(t_point *point, t_map *map));
 void	*translate_point(t_point *point, t_map *map);
 void	*project_point(t_point *point, t_map *map);
 void	*zoom_point(t_point *point, t_map *map);
 void	*random_point_color(t_point *point, t_map *map);
 void	*reset(t_point *point, t_map *map);
 
-//window stuff
+//keyhook
 void	my_keyhook(mlx_key_data_t keydata, void *param);
 
 //projection
 void	rotate_yaxis(t_point *point, double rad);
-void	vec_mat_mul(t_point *p, const double m[3][3]);
 void	rotate_xaxis(t_point *point, double rad);
 void	rotate_zaxis(t_point *point, double rad);
 
 //color
-int		line_clr_inter(t_point *st, t_point *end, t_bresenham *l, t_map *map);
+int		l_clr(t_point *st, t_point *end, t_bresenham *l, t_map *map);
 int		ft_random(int min, int max);
 
-//main
-t_input	*init_input(t_input *input, char *map_name);
+//key_backend
+void	translate(keys_t key, t_data *data);
+void	zoom(keys_t key, t_data *data);
+void	rotate(keys_t key, t_data *data);
+void	toggle_color(t_data *data);
+void	backview(t_data *data);
 
 #endif

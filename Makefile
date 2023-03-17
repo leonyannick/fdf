@@ -6,14 +6,14 @@
 #    By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/19 09:17:44 by lbaumann          #+#    #+#              #
-#    Updated: 2023/03/13 13:26:49 by lbaumann         ###   ########.fr        #
+#    Updated: 2023/03/17 12:09:15 by lbaumann         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fdf
 
 CC = cc
-#CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 
 UNAME := $(shell uname)
 
@@ -40,9 +40,11 @@ SRC = main.c \
 	line.c \
 	map.c \
 	projection.c \
-	window.c \
+	keyhook.c \
+	key_backend.c \
 	point_ops.c \
 	color.c \
+	draw.c \
 	utils.c \
 	init_data.c
 

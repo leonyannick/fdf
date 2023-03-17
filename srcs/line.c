@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 18:26:05 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 17:52:55 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:24:23 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ void	plot_line(t_point *p1, t_point *p2, t_data *data)
 {
 	t_bresenham	*l;
 
+	l = NULL;
 	l = init_line(p1, p2, l);
 	if (!l)
 		return ;
 	while (l->x != (int)p2->x || l->y != (int)p2->y)
 	{
 		if ((l->x >= 0) && (l->y >= 0) && (l->x < WIDTH) && (l->y < HEIGHT))
-			mlx_put_pixel(data->img, l->x, l->y,
-				line_clr_inter(p1, p2, l, data->map));
+			mlx_put_pixel(data->img, l->x, l->y, l_clr(p1, p2, l, data->map));
 		l->e2 = 2 * l->err;
 		if (l->e2 >= l->dy)
 		{
@@ -82,51 +82,4 @@ void	plot_line(t_point *p1, t_point *p2, t_data *data)
 	if ((l->x >= 0) && (l->y >= 0) && (l->x < WIDTH) && (l->y < HEIGHT))
 		mlx_put_pixel(data->img, l->x, l->y, p2->color);
 	free(l);
-}
-
-void	connect_the_dots(t_data *data)
-{
-	int		r;
-	int		c;
-
-	r = -1;
-	while (++r < data->map->nrows)
-	{
-		c = -1;
-		while (++c < (data->map->nclmns - 1))
-		{
-			plot_line((data->map->map_arr)[r][c],
-				(data->map->map_arr)[r][c + 1], data);
-		}
-	}
-	c = -1;
-	while (++c < data->map->nclmns)
-	{
-		r = -1;
-		while (++r < (data->map->nrows - 1))
-			plot_line((data->map->map_arr)[r][c],
-				(data->map->map_arr)[r + 1][c], data);
-	}
-}
-
-t_data	*paint_pixels(t_data *data, void *(*f)(t_point *point, t_map *map))
-{
-	int		row;
-	int		clmn;
-
-	row = 0;
-	ft_memset(data->img->pixels, 0, data->img->width * data->img->height * SZ);
-	while (row < data->map->nrows)
-	{
-		clmn = 0;
-		while (clmn < (data->map->nclmns))
-		{
-			if (!(*f)((data->map->map_arr)[row][clmn], data->map))
-				return (NULL);
-			clmn++;
-		}
-		row++;
-	}
-	connect_the_dots(data);
-	return (data);
 }

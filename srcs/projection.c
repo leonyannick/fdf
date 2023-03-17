@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:36:26 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/16 10:21:01 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:08:42 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @param p point (vector) for multiplication
  * @param m 3x3 vector for multiplication
 */
-void	vec_mat_mul(t_point *p, const double m[3][3])
+static void	vec_mat_mul(t_point *p, const double m[3][3])
 {
 	double	x_temp;
 	double	y_temp;
