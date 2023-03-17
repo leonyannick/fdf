@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:55:09 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/17 12:12:48 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:50:12 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static t_input	*init_input(t_input *input, char *map_file)
 	input->x = 0;
 	input->y = 0;
 	input->fd = open(map_file, O_RDONLY);
-	if (!input->fd)
-		return (NULL);
+	if (input->fd < 0)
+		return (free(input->map_file), free(input), NULL);
 	return (input);
 }
 
@@ -68,10 +68,10 @@ t_data	*init_data(t_data *data, char	*map_file)
 		return (perror("data alloc failed"), NULL);
 	data->input = init_input(data->input, map_file);
 	if (!data->input)
-		return (perror("data->input init failed"), NULL);
+		return (perror("data->input init failed"), free(data), NULL);
 	data->map = init_map(data);
 	if (!data->map)
-		return (perror("data->map init failed"), NULL);
+		return (perror("data->map init failed"), free(data), NULL);
 	data->mlx = mlx_init(WIDTH, HEIGHT, "fdf", true);
 	if (!data->mlx)
 		return (perror("data->mlx init failed"), NULL);

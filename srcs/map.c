@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:33:44 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/17 09:56:33 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:47:01 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,9 @@ t_map	*malloc_map_rows(t_map *map, t_input *input)
 		return (perror("map_arr alloc failed"), NULL);
 	close(input->fd);
 	input->fd = open(input->map_file, O_RDONLY);
-	if (!input->fd)
-		return (NULL);
+	free(input->map_file);
+	if (input->fd < 0)
+		return (free(input), NULL);
 	input->line = NULL;
 	input->split_line = NULL;
 	return (map);
@@ -107,7 +108,6 @@ t_map	*parse_map(t_map *map, t_input *input)
 	}
 	free(input->line);
 	free_split_arr(input->split_line);
-	free(input->map_file);
 	free(input);
 	return (map);
 }
