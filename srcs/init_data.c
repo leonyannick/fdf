@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:55:09 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/20 12:56:41 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/20 13:07:10 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * file
  * @return NULL on error, pointer to input struct in success
 */
-static t_input	*init_input(t_input *input, char *map_file, t_data *data)
+static t_input	*init_input(t_input *input, char *map_file)
 {
 	input = malloc(sizeof(t_input));
 	if (!input)
@@ -81,7 +81,7 @@ t_data	*init_data(t_data *data, char	*map_file)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (perror("data alloc failed"), NULL);
-	data->input = init_input(data->input, map_file, data);
+	data->input = init_input(data->input, map_file);
 	if (!data->input)
 		return (perror("data->input init failed"), free(data), NULL);
 	data->map = init_map(data);
