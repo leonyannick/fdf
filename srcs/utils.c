@@ -6,7 +6,7 @@
 /*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:22:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/20 12:39:43 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/20 14:29:53 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_map(t_map *map)
 				(int)pt->x, (int)pt->y, (int)pt->z);
 			clmn++;
 		}
-		printf("\n");
+		ft_printf("\n");
 		row++;
 	}
 }
