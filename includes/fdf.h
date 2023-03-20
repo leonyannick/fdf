@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 11:42:54 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/17 12:24:32 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/20 12:52:57 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct s_bresenham
 
 //init_data
 t_data	*init_data(t_data *data, char	*map_file);
+void	free_data(t_data *data);
 
 //line plotting
 void	plot_line(t_point *p1, t_point *p2, t_data *data);
@@ -132,16 +133,16 @@ t_data	*paint_pixels(t_data *data, void *(*f)(t_point *point, t_map *map));
 void	connect_the_dots(t_data *data);
 
 //map
-t_map	*malloc_map_rows(t_map *map, t_input *input);
-t_map	*parse_map(t_map *map, t_input *input);
+t_map	*malloc_map_rows(t_map *map, t_input *input, t_data *data);
+t_map	*parse_map(t_map *map, t_input *input, t_data *data);
 t_map	*add_point(t_map *map, int x, int y, int z);
 
 //utils
 void	print_map(t_map *map);
-void	free_split_arr(char **arr);
+void	*free_split_arr(char **arr);
 int		n_sub_arr(char **s);
 void	gnl_split(t_input *input);
-void	free_map(t_map *map);
+t_map	*free_map(t_map *map, int nrows);
 
 //point operations
 void	*translate_point(t_point *point, t_map *map);

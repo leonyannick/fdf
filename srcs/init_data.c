@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:55:09 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/17 14:50:07 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/20 12:56:41 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * file
  * @return NULL on error, pointer to input struct in success
 */
-static t_input	*init_input(t_input *input, char *map_file)
+static t_input	*init_input(t_input *input, char *map_file, t_data *data)
 {
 	input = malloc(sizeof(t_input));
 	if (!input)
@@ -27,7 +27,7 @@ static t_input	*init_input(t_input *input, char *map_file)
 	input->y = 0;
 	input->fd = open(map_file, O_RDONLY);
 	if (input->fd < 0)
-		return (NULL);
+		return (free(input->map_file), free(input), NULL);
 	return (input);
 }
 
@@ -51,9 +51,24 @@ static t_map	*init_map(t_data *data)
 	data->map->nclmns = 0;
 	data->map->color = P_COLOR;
 	data->map->clr_int = false;
-	data->map = malloc_map_rows(data->map, data->input);
-	data->map = parse_map(data->map, data->input);
+	data->map = malloc_map_rows(data->map, data->input, data);
+	data->map = parse_map(data->map, data->input, data);
 	return (data->map);
+}
+
+void	free_data(t_data *data)
+{
+	if (!data)
+		return ;
+	if (data->map)
+		data->map = free_map(data->map, data->input->y);
+	if (data->input)
+	{
+		data->input->map_file = ft_free_set_null(data->input->map_file);
+		data->input->line = ft_free_set_null(data->input->line);
+		data->input->split_line = free_split_arr(data->input->split_line);
+		data->input = ft_free_set_null(data->input);
+	}
 }
 
 /**
@@ -66,17 +81,20 @@ t_data	*init_data(t_data *data, char	*map_file)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (perror("data alloc failed"), NULL);
-	data->input = init_input(data->input, map_file);
+	data->input = init_input(data->input, map_file, data);
 	if (!data->input)
-		return (perror("data->input init failed"), NULL);
+		return (perror("data->input init failed"), free(data), NULL);
 	data->map = init_map(data);
 	if (!data->map)
-		return (perror("data->map init failed"), NULL);
+		return (perror("data->map init failed"),
+			free_data(data), free(data), NULL);
 	data->mlx = mlx_init(WIDTH, HEIGHT, "fdf", true);
 	if (!data->mlx)
-		return (perror("data->mlx init failed"), NULL);
+		return (perror("data->mlx init failed"),
+			free_data(data), free(data), NULL);
 	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	if (!data->img || (mlx_image_to_window(data->mlx, data->img, 0, 0) < 0))
-		return (perror("data->img init failed"), NULL);
+		return (perror("data->img init failed"),
+			free_data(data), free(data), NULL);
 	return (data);
 }
