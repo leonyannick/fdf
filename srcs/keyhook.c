@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keyhook.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbaumann <lbaumann@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: lbaumann <lbaumann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:03:34 by lbaumann          #+#    #+#             */
-/*   Updated: 2023/03/17 10:16:08 by lbaumann         ###   ########.fr       */
+/*   Updated: 2023/03/23 10:44:29 by lbaumann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,6 @@ void	my_keyhook(mlx_key_data_t keydata, void *param)
 		paint_pixels(data, &reset);
 	if (keydata.key == MLX_KEY_F && keydata.action == MLX_PRESS)
 		backview(data);
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+		mlx_close_window(data->mlx);
 }
